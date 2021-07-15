@@ -2,7 +2,7 @@ const Nodesu = require('nodesu');
 const Discord = require('discord.js');
 const fs = require('fs');
 
-const { apiKey } = require('../config')
+const  apiKey  = process.env.apiKey
 
 const api = new Nodesu.Client(apiKey,{ parseData : true});
 // ... see docs/Modules:Components - typical usage = api.<component>.<function>();

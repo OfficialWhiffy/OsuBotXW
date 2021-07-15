@@ -1,5 +1,4 @@
 {
     "prefix": ".",
-    "apiKey": "d2862f44a1269fa8a28a26e9bfa62b94a6ef3317",
     "mongoPath": "mongodb://localhost:27017"
 }
