@@ -1,0 +1,47 @@
+{
+  "name": "testing-bot",
+  "version": "1.0.0",
+  "description": "WHAT IS IN HERE",
+  "main": "bot.js",
+  "nodemonConfig": {
+    "watch": [
+      "server"
+    ],
+    "ext": "js",
+    "ignore": [
+      "*.test.ts"
+    ],
+    "delay": "3",
+    "execMap": {
+      "ts": "ts-node"
+    }
+  },
+  "dependencies": {
+    "@discordjs/opus": "^0.4.0",
+    "axios": "^0.21.1",
+    "canvas": "^2.7.0",
+    "chai": "^4.3.4",
+    "discord": "^0.8.2",
+    "discord.js": "^12.5.3",
+    "discord.js-collector": "^1.8.8",
+    "discord.js-v11": "^12.1.1",
+    "eslint": "^7.29.0",
+    "ffmpeg-static": "^4.2.7",
+    "lzma-native": "^6.0.1",
+    "mongodb": "^3.6.8",
+    "mongoose": "^5.13.2",
+    "node-fetch": "^2.6.1",
+    "nodesu": "^0.7.2",
+    "osu-api-extended": "^1.0.12",
+    "osu-bpdpc": "^0.3.0",
+    "request": "^2.88.2",
+    "request-promise-native": "^1.0.9",
+    "ytdl-core": "^4.5.0"
+  },
+  "scripts": {
+    "test": "C:/Users/taser/OneDrive/Documenten/GitHub/osu-bot/node_modules/.bin/mocha -t 10000 --reporter spec",
+    "start": "bot.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
