@@ -3,7 +3,7 @@ const mongo = require('../mongo')
 const userSchema = require ('../schemas/test-schema')
 const fs = require('fs');
 const Nodesu = require('nodesu');
-const { apiKey, token } = require('../config.json')
+const apiKey  = process.env.apiKey
 
 const { V1, V2, tools } = require('osu-api-extended');
 

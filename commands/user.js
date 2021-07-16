@@ -3,7 +3,7 @@ const mongo = require('../mongo')
 const userSchema = require ('../schemas/test-schema')
 const fs = require('fs');
 const Nodesu = require('nodesu');
-const { apiKey } = require('../config.json');
+const apiKey  = process.env.apiKey
 
 const api = new Nodesu.Client(apiKey,{ parseData : true});
 
