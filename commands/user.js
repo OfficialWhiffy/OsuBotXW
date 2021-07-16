@@ -3,7 +3,7 @@ const mongo = require('../mongo')
 const userSchema = require ('../schemas/test-schema')
 const fs = require('fs');
 const Nodesu = require('nodesu');
-const  apiKey  = process.env.apiKey
+const { apiKey } = require('../config.json');
 
 const api = new Nodesu.Client(apiKey,{ parseData : true});
 
@@ -18,11 +18,17 @@ module.exports = {
 
         let data = cache[member.id]
 
+
         if (!data) {
             console.log('FETCHING FROM DATABASE')
             await mongo().then(async mongoose => {
                  try {
                     const result = await userSchema.findOne({ _id: member.id })
+
+                    if(!result){
+						message.channel.send("No user found set user using '.setuser <username or userid>' ")
+						return;
+					}
 
                     cache[member.id] = data = [result.text]
                 } finally {
