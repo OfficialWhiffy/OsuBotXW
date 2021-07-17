@@ -11,6 +11,7 @@ const api = new Nodesu.Client(apiKey,{ parseData : true});
 
 module.exports = {
 	name: 'recent',
+	aliases: ['rs', 'r'],
 	description: 'beatmap info',
 	async execute(message, args) {
 
