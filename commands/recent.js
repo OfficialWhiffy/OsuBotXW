@@ -194,7 +194,7 @@ api.user
 					.addFields(
 						{name: '\u200b', value: '**PP:** ' + ppDATA + fcdata + accuracy + '% accuracy' , inline: true},
 						{name: '\u200b' , value: '**Rank:** ' + `${recentDATA.rank}` +'  **Score:** ' + `${recentDATA.score}`},
-						{name: '\u200b', value: '**Misses** ' + `${recentDATA.countMiss}` + ', **300** ' + `${recentDATA.count300}` + ', **100** ' + `${recentDATA.count100}` + ', **50** ' + `${recentDATA.count50}`},
+						{name: '\u200b', value: '**Misses:** ' + `${recentDATA.countMiss}` + ', **300:** ' + `${recentDATA.count300}` + ', **100:** ' + `${recentDATA.count100}` + ', **50:** ' + `${recentDATA.count50}`},
 						{name: '\u200b', value: '**Combo:** ' + `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}` + ' **Status:** ' + status + ' ' , inline: true})
 					.setImage('https://assets.ppy.sh/beatmaps/' +  `${beatmapDATA.setId}` + '/covers/cover.jpg')
 					.setTimestamp()
@@ -354,7 +354,7 @@ else{
 		.addFields(
 			{name: '\u200b', value: '**PP:** ' + ppDATA + fcdata + accuracy + '% accuracy' , inline: true},
 			{name: '\u200b' , value: '**Rank:** ' + `${recentDATA.rank}` +'  **Score:** ' + `${recentDATA.score}`},
-			{name: '\u200b', value: '**Misses** ' + `${recentDATA.countMiss}` + ', **300** ' + `${recentDATA.count300}` + ', **100** ' + `${recentDATA.count100}` + ', **50** ' + `${recentDATA.count50}`},
+			{name: '\u200b', value: '**Misses:** ' + `${recentDATA.countMiss}` + ', **300:** ' + `${recentDATA.count300}` + ', **100:** ' + `${recentDATA.count100}` + ', **50:** ' + `${recentDATA.count50}`},
 			{name: '\u200b', value: '**Combo:** ' + `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}` + ' **Status:** ' + status + ' ' , inline: true})
 		.setImage('https://assets.ppy.sh/beatmaps/' +  `${beatmapDATA.setId}` + '/covers/cover.jpg')
 		.setTimestamp()
