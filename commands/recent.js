@@ -3,11 +3,16 @@ const mongo = require('../mongo')
 const userSchema = require ('../schemas/test-schema')
 const fs = require('fs');
 const Nodesu = require('nodesu');
-const apiKey  = process.env.apiKey
+const { token } = require('../config.json')
+
+apiKey = process.env.apiKey
 
 const { V1, V2, tools } = require('osu-api-extended');
+const v1 = new V1(apiKey)
 
 const api = new Nodesu.Client(apiKey,{ parseData : true});
+
+let osr = require('node-osr')
 
 module.exports = {
 	name: 'recent',
@@ -131,213 +136,71 @@ api.user
 				const starRating = data.stats.star.pure;
 				const modData = data.mods.name
 				const status = data.status.name;
-				console.log(data.status.name);
+				console.log(data);
+
+		
+
+			const rawRank = `${recentDATA.rank}`
+			var footerImage = Math.random() < 0.5 ? "https://i.imgur.com/mDXh9Sd.png" : "https://a.ppy.sh/14459921?1577801006.jpeg";
+			var sidecolor = ('');
+			switch(rawRank){
+
+				case 'A':
+					sidecolor = '#2ECC71'
+				break;
+				case 'B':
+					sidecolor ='#3498DB'
+				break;
+				case 'C':
+					sidecolor = '#AD1457'
+				break;
+				case 'D':
+					sidecolor = '#E74C3C'
+				break;
+				case 'F':
+					sidecolor = '#992D22'
+				break;
+				case 'S':
+					sidecolor = '#F1C40F'
+				break;
+				case 'X':
+					sidecolor = '#C27C0E'
+				break;
+				case 'SH':
+					sidecolor = '#7F8C8D'
+				break;
+				case 'XH':
+					sidecolor = '#BCC0C0'
+				break;
 
 
 
-
-		var footerImage = Math.random() < 0.5 ? "https://i.imgur.com/mDXh9Sd.png" : "https://a.ppy.sh/14459921?1577801006.jpeg";
-				if(`${recentDATA.rank}` == 'F'){
-					const beatmapEmbedFailed = new Discord.MessageEmbed()
-					.setColor('#992D22')
-					.setTitle(`${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ` Played by ` + `${userDATA.username}` + ' + ' + modData + ' ['+ starRating + '*' + '] ')
-					.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
-					.setThumbnail('http://s.ppy.sh/a/' +  `${recentDATA.userId}`)
-					.addFields(
-						{name: 'PP: ', value: ppDATA, inline: true},
-						{name: 'PP if FC: ', value: ppDATAFc, inline: true},
-						{name: 'Accuracy : ', value: accuracy, inline: true},
-						{name: 'Rank ', value: `${recentDATA.rank}`, inline: true},
-						{name: 'Score' , value: `${recentDATA.score}`, inline: true},
-						{name: 'Misses ', value: `${recentDATA.countMiss}`, inline: true},
-						{name: '300 ', value: `${recentDATA.count300}`, inline: true},
-						{name: '100 ', value: `${recentDATA.count100}`, inline: true},
-						{name: '50 ', value: `${recentDATA.count50}`, inline: true},
-						{name: 'Status: ', value: status, inline: true},
-						{name: 'Combo: ', value: `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}`, inline: true})
-					.setImage('https://assets.ppy.sh/beatmaps/' +  `${beatmapDATA.setId}` + '/covers/cover.jpg')
-					.setTimestamp()
-					.setFooter('Made by Xhera & Whiffy', footerImage)
-
-				message.channel.send(beatmapEmbedFailed);
-
-				}
-
-				if(`${recentDATA.rank}` == 'S'){
-					const beatmapEmbedS = new Discord.MessageEmbed()
-					.setColor('#F1C40F')
-					.setTitle(`${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ` Played by ` + `${userDATA.username}` + ' + ' + modData + ' ['+ starRating + '*' + '] ')
-					.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
-					.setThumbnail('http://s.ppy.sh/a/' +  `${recentDATA.userId}`)
-					.addFields(
-						{name: 'PP: ', value: ppDATA, inline: true},
-						{name: 'PP if FC: ', value: ppDATAFc, inline: true},
-						{name: 'Accuracy : ', value: accuracy, inline: true},
-						{name: 'Rank ', value: `${recentDATA.rank}`, inline: true},
-						{name: 'Score' , value: `${recentDATA.score}`, inline: true},
-						{name: 'Misses ', value: `${recentDATA.countMiss}`, inline: true},
-						{name: '300 ', value: `${recentDATA.count300}`, inline: true},
-						{name: '100 ', value: `${recentDATA.count100}`, inline: true},
-						{name: '50 ', value: `${recentDATA.count50}`, inline: true},
-						{name: 'Status: ', value: status, inline: true},
-						{name: 'Combo: ', value: `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}`, inline: true})
-					.setImage('https://assets.ppy.sh/beatmaps/' +  `${beatmapDATA.setId}` + '/covers/cover.jpg')
-					.setTimestamp()
-					.setFooter('Made by Xhera & Whiffy', footerImage)
-
-				message.channel.send(beatmapEmbedS);
-
-				}
-
-				if(`${recentDATA.rank}` == 'X'){
-					const beatmapEmbedSS = new Discord.MessageEmbed()
-					.setColor('#C27C0E')
-					.setTitle(`${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ` Played by ` + `${userDATA.username}` + ' + ' + modData + ' ['+ starRating + '*' + '] ')
-					.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
-					.setThumbnail('http://s.ppy.sh/a/' +  `${recentDATA.userId}`)
-					.addFields(
-						{name: 'PP: ', value: ppDATA, inline: true},
-						{name: 'PP if FC: ', value: ppDATAFc, inline: true},
-						{name: 'Accuracy : ', value: accuracy, inline: true},
-						{name: 'Rank ', value: `${recentDATA.rank}`, inline: true},
-						{name: 'Score' , value: `${recentDATA.score}`, inline: true},
-						{name: 'Misses ', value: `${recentDATA.countMiss}`, inline: true},
-						{name: '300 ', value: `${recentDATA.count300}`, inline: true},
-						{name: '100 ', value: `${recentDATA.count100}`, inline: true},
-						{name: '50 ', value: `${recentDATA.count50}`, inline: true},
-						{name: 'Status: ', value: status, inline: true},
-						{name: 'Combo: ', value: `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}`, inline: true})
-					.setImage('https://assets.ppy.sh/beatmaps/' +  `${beatmapDATA.setId}` + '/covers/cover.jpg')
-					.setTimestamp()
-					.setFooter('Made by Xhera & Whiffy', footerImage)
-
-				message.channel.send(beatmapEmbedSS);
-
-				}
-
-				if(`${recentDATA.rank}` == 'B'){
-					const beatmapEmbedB = new Discord.MessageEmbed()
-					.setColor('#3498DB')
-					.setTitle(`${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ` Played by ` + `${userDATA.username}` + ' + ' + modData + ' ['+ starRating + '*' + '] ')
-					.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
-					.setThumbnail('http://s.ppy.sh/a/' +  `${recentDATA.userId}`)
-					.addFields(
-						{name: 'PP: ', value: ppDATA, inline: true},
-						{name: 'PP if FC: ', value: ppDATAFc, inline: true},
-						{name: 'Accuracy : ', value: accuracy, inline: true},
-						{name: 'Rank ', value: `${recentDATA.rank}`, inline: true},
-						{name: 'Score' , value: `${recentDATA.score}`, inline: true},
-						{name: 'Misses ', value: `${recentDATA.countMiss}`, inline: true},
-						{name: '300 ', value: `${recentDATA.count300}`, inline: true},
-						{name: '100 ', value: `${recentDATA.count100}`, inline: true},
-						{name: '50 ', value: `${recentDATA.count50}`, inline: true},
-						{name: 'Status: ', value: status, inline: true},
-						{name: 'Combo: ', value: `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}`, inline: true})
-					.setImage('https://assets.ppy.sh/beatmaps/' +  `${beatmapDATA.setId}` + '/covers/cover.jpg')
-					.setTimestamp()
-					.setFooter('Made by Xhera & Whiffy', footerImage)
-
-				message.channel.send(beatmapEmbedB);
-
-				}
-				if(`${recentDATA.rank}` == 'C'){
-		const beatmapEmbedC = new Discord.MessageEmbed()
-			.setColor('#02fa62')
-			.setTitle(`${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ` Played by ` + `${userDATA.username}` + ' + ' + modData + ' ['+ starRating + '*' + '] ')
-			.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
-			.setThumbnail('http://s.ppy.sh/a/' +  `${recentDATA.userId}`)
-			.addFields(
-				{name: 'PP: ', value: ppDATA, inline: true},
-				{name: 'PP if FC: ', value: ppDATAFc, inline: true},
-				{name: 'Accuracy : ', value: accuracy, inline: true},
-				{name: 'Rank ', value: `${recentDATA.rank}`, inline: true},
-				{name: 'Score' , value: `${recentDATA.score}`, inline: true},
-				{name: 'Misses ', value: `${recentDATA.countMiss}`, inline: true},
-				{name: '300 ', value: `${recentDATA.count300}`, inline: true},
-				{name: '100 ', value: `${recentDATA.count100}`, inline: true},
-				{name: '50 ', value: `${recentDATA.count50}`, inline: true},
-				{name: 'Status: ', value: status, inline: true},
-				{name: 'Combo: ', value: `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}`, inline: true})
-			.setImage('https://assets.ppy.sh/beatmaps/' +  `${beatmapDATA.setId}` + '/covers/cover.jpg')
-			.setTimestamp()
-			.setFooter('Made by Xhera & Whiffy', footerImage)
-
-		message.channel.send(beatmapEmbedC);
 			}
-			if(`${recentDATA.rank}` == 'D'){
-				const beatmapEmbedB = new Discord.MessageEmbed()
-				.setColor('#E74C3C')
-				.setTitle(`${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ` Played by ` + `${userDATA.username}` + ' + ' + modData + ' ['+ starRating + '*' + '] ')
-				.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
-				.setThumbnail('http://s.ppy.sh/a/' +  `${recentDATA.userId}`)
-				.addFields(
-					{name: 'PP: ', value: ppDATA, inline: true},
-					{name: 'PP if FC: ', value: ppDATAFc, inline: true},
-					{name: 'Accuracy : ', value: accuracy, inline: true},
-					{name: 'Rank ', value: `${recentDATA.rank}`, inline: true},
-					{name: 'Score' , value: `${recentDATA.score}`, inline: true},
-					{name: 'Misses ', value: `${recentDATA.countMiss}`, inline: true},
-					{name: '300 ', value: `${recentDATA.count300}`, inline: true},
-					{name: '100 ', value: `${recentDATA.count100}`, inline: true},
-					{name: '50 ', value: `${recentDATA.count50}`, inline: true},
-					{name: 'Status: ', value: status, inline: true},
-					{name: 'Combo: ', value: `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}`, inline: true})
-				.setImage('https://assets.ppy.sh/beatmaps/' +  `${beatmapDATA.setId}` + '/covers/cover.jpg')
-				.setTimestamp()
-				.setFooter('Made by Xhera & Whiffy', footerImage)
 
-			message.channel.send(beatmapEmbedB);
+
+				if(data.pp.current === data.pp.fc) {
+					var fcdata = (' with ')
 				}
-				else{
-				const beatmapEmbedC = new Discord.MessageEmbed()
-			.setColor('#02fa62')
-			.setTitle(`${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ` Played by ` + `${userDATA.username}` + ' + ' + modData + ' ['+ starRating + '*' + '] ')
-			.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
-			.setThumbnail('http://s.ppy.sh/a/' +  `${recentDATA.userId}`)
-			.addFields(
-				{name: 'PP: ', value: ppDATA, inline: true},
-				{name: 'PP if FC: ', value: ppDATAFc, inline: true},
-				{name: 'Accuracy : ', value: accuracy, inline: true},
-				{name: 'Rank ', value: `${recentDATA.rank}`, inline: true},
-				{name: 'Score' , value: `${recentDATA.score}`, inline: true},
-				{name: 'Misses ', value: `${recentDATA.countMiss}`, inline: true},
-				{name: '300 ', value: `${recentDATA.count300}`, inline: true},
-				{name: '100 ', value: `${recentDATA.count100}`, inline: true},
-				{name: '50 ', value: `${recentDATA.count50}`, inline: true},
-				{name: 'Status: ', value: status, inline: true},
-				{name: 'Combo: ', value: `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}`, inline: true})
-			.setImage('https://assets.ppy.sh/beatmaps/' +  `${beatmapDATA.setId}` + '/covers/cover.jpg')
-			.setTimestamp()
-			.setFooter('Made by Xhera & Whiffy', footerImage)
+				else {
+					fcdata = ' | **PP if FC ->** ' + ppDATAFc + ' with '
 				}
-				if(`${recentDATA.rank}` == 'SH'){
-					const beatmapEmbedB = new Discord.MessageEmbed()
-					.setColor('#BCC0C0')
-					.setTitle(`${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ` Played by ` + `${userDATA.username}` + ' + ' + modData + ' ['+ starRating + '*' + '] ')
+
+
+				const recentEmbed = new Discord.MessageEmbed()
+					.setColor(sidecolor)
+					.setTitle(`${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ' + ' + modData + ' ['+ starRating + '*' + '] ')
 					.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
 					.setThumbnail('http://s.ppy.sh/a/' +  `${recentDATA.userId}`)
 					.addFields(
-						{name: 'PP: ', value: ppDATA, inline: true},
-						{name: 'PP if FC: ', value: ppDATAFc, inline: true},
-						{name: 'Accuracy : ', value: accuracy, inline: true},
-						{name: 'Rank ', value: `${recentDATA.rank}`, inline: true},
-						{name: 'Score' , value: `${recentDATA.score}`, inline: true},
-						{name: 'Misses ', value: `${recentDATA.countMiss}`, inline: true},
-						{name: '300 ', value: `${recentDATA.count300}`, inline: true},
-						{name: '100 ', value: `${recentDATA.count100}`, inline: true},
-						{name: '50 ', value: `${recentDATA.count50}`, inline: true},
-						{name: 'Status: ', value: status, inline: true},
-						{name: 'Combo: ', value: `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}`, inline: true})
+						{name: '\u200b', value: '**PP:** ' + ppDATA + fcdata + accuracy + '% accuracy' , inline: true},
+						{name: '\u200b' , value: '**Rank:** ' + `${recentDATA.rank}` +'  **Score:** ' + `${recentDATA.score}`},
+						{name: '\u200b', value: '**Misses** ' + `${recentDATA.countMiss}` + ' ,**300** ' + `${recentDATA.count300}` + ' ,**100** ' + `${recentDATA.count100}` + ' ,**50** ' + `${recentDATA.count50}`},
+						{name: '\u200b', value: '**Combo:** ' + `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}` + ' **Status:** ' + status + ' ' , inline: true})
 					.setImage('https://assets.ppy.sh/beatmaps/' +  `${beatmapDATA.setId}` + '/covers/cover.jpg')
 					.setTimestamp()
 					.setFooter('Made by Xhera & Whiffy', footerImage)
-	
-				message.channel.send(beatmapEmbedB);
-					}
-				
-				
-				
 
+				message.channel.send(recentEmbed)
 				
 				})
 			})
@@ -435,207 +298,69 @@ else{
 				const status = data.status.name;
 				console.log(data.status.name);
 
+				const rawRank = `${recentDATA.rank}`
+
+
+				switch(rawRank){
+
+					case 'A':
+						sidecolor = '#2ECC71'
+					break;
+					case 'B':
+						sidecolor ='#3498DB'
+					break;
+					case 'C':
+						sidecolor = '#AD1457'
+					break;
+					case 'D':
+						sidecolor = '#E74C3C'
+					break;
+					case 'F':
+						sidecolor = '#992D22'
+					break;
+					case 'S':
+						sidecolor = '#F1C40F'
+					break;
+					case 'X':
+						sidecolor = '#C27C0E'
+					break;
+					case 'SH':
+						sidecolor = '#7F8C8D'
+					break;
+					case 'XH':
+						sidecolor = '#BCC0C0'
+					break;
+	
+	
+	
+				}
+
+				if(data.pp.current === data.pp.fc) {
+					var fcdata = (' with ')
+				}
+				else {
+					fcdata = ' | **PP if FC ->** ' + ppDATAFc + ' with '
+				}
+
 
 
 
 		var footerImage = Math.random() < 0.5 ? "https://i.imgur.com/mDXh9Sd.png" : "https://a.ppy.sh/14459921?1577801006.jpeg";
-				if(`${recentDATA.rank}` == 'F'){
-					const beatmapEmbedFailed = new Discord.MessageEmbed()
-					.setColor('#992D22')
-					.setTitle(`${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ` Played by ` + `${userDATA.username}` + ' + ' + modData + ' ['+ starRating + '*' + '] ')
-					.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
-					.setThumbnail('http://s.ppy.sh/a/' +  `${recentDATA.userId}`)
-					.addFields(
-						{name: 'PP: ', value: ppDATA, inline: true},
-						{name: 'PP if FC: ', value: ppDATAFc, inline: true},
-						{name: 'Accuracy : ', value: accuracy, inline: true},
-						{name: 'Rank ', value: `${recentDATA.rank}`, inline: true},
-						{name: 'Score' , value: `${recentDATA.score}`, inline: true},
-						{name: 'Misses ', value: `${recentDATA.countMiss}`, inline: true},
-						{name: '300 ', value: `${recentDATA.count300}`, inline: true},
-						{name: '100 ', value: `${recentDATA.count100}`, inline: true},
-						{name: '50 ', value: `${recentDATA.count50}`, inline: true},
-						{name: 'Status: ', value: status, inline: true},
-						{name: 'Combo: ', value: `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}`, inline: true})
-					.setImage('https://assets.ppy.sh/beatmaps/' +  `${beatmapDATA.setId}` + '/covers/cover.jpg')
-					.setTimestamp()
-					.setFooter('Made by Xhera & Whiffy', footerImage)
+		const recentEmbed = new Discord.MessageEmbed()
+		.setColor(sidecolor)
+		.setTitle(`${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ' + ' + modData + ' ['+ starRating + '*' + '] ')
+		.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
+		.setThumbnail('http://s.ppy.sh/a/' +  `${recentDATA.userId}`)
+		.addFields(
+			{name: '\u200b', value: '**PP:** ' + ppDATA + fcdata + accuracy + '% accuracy' , inline: true},
+			{name: '\u200b' , value: '**Rank:** ' + `${recentDATA.rank}` +'  **Score:** ' + `${recentDATA.score}`},
+			{name: '\u200b', value: '**Misses** ' + `${recentDATA.countMiss}` + ' ,**300** ' + `${recentDATA.count300}` + ' ,**100** ' + `${recentDATA.count100}` + ' ,**50** ' + `${recentDATA.count50}`},
+			{name: '\u200b', value: '**Combo:** ' + `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}` + ' **Status:** ' + status + ' ' , inline: true})
+		.setImage('https://assets.ppy.sh/beatmaps/' +  `${beatmapDATA.setId}` + '/covers/cover.jpg')
+		.setTimestamp()
+		.setFooter('Made by Xhera & Whiffy', footerImage)
 
-				message.channel.send(beatmapEmbedFailed);
-
-				}
-
-				if(`${recentDATA.rank}` == 'S'){
-					const beatmapEmbedS = new Discord.MessageEmbed()
-					.setColor('#F1C40F')
-					.setTitle(`${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ` Played by ` + `${userDATA.username}` + ' + ' + modData + ' ['+ starRating + '*' + '] ')
-					.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
-					.setThumbnail('http://s.ppy.sh/a/' +  `${recentDATA.userId}`)
-					.addFields(
-						{name: 'PP: ', value: ppDATA, inline: true},
-						{name: 'PP if FC: ', value: ppDATAFc, inline: true},
-						{name: 'Accuracy : ', value: accuracy, inline: true},
-						{name: 'Rank ', value: `${recentDATA.rank}`, inline: true},
-						{name: 'Score' , value: `${recentDATA.score}`, inline: true},
-						{name: 'Misses ', value: `${recentDATA.countMiss}`, inline: true},
-						{name: '300 ', value: `${recentDATA.count300}`, inline: true},
-						{name: '100 ', value: `${recentDATA.count100}`, inline: true},
-						{name: '50 ', value: `${recentDATA.count50}`, inline: true},
-						{name: 'Status: ', value: status, inline: true},
-						{name: 'Combo: ', value: `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}`, inline: true})
-					.setImage('https://assets.ppy.sh/beatmaps/' +  `${beatmapDATA.setId}` + '/covers/cover.jpg')
-					.setTimestamp()
-					.setFooter('Made by Xhera & Whiffy', footerImage)
-
-				message.channel.send(beatmapEmbedS);
-
-				}
-
-				if(`${recentDATA.rank}` == 'X'){
-					const beatmapEmbedSS = new Discord.MessageEmbed()
-					.setColor('#C27C0E')
-					.setTitle(`${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ` Played by ` + `${userDATA.username}` + ' + ' + modData + ' ['+ starRating + '*' + '] ')
-					.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
-					.setThumbnail('http://s.ppy.sh/a/' +  `${recentDATA.userId}`)
-					.addFields(
-						{name: 'PP: ', value: ppDATA, inline: true},
-						{name: 'PP if FC: ', value: ppDATAFc, inline: true},
-						{name: 'Accuracy : ', value: accuracy, inline: true},
-						{name: 'Rank ', value: `${recentDATA.rank}`, inline: true},
-						{name: 'Score' , value: `${recentDATA.score}`, inline: true},
-						{name: 'Misses ', value: `${recentDATA.countMiss}`, inline: true},
-						{name: '300 ', value: `${recentDATA.count300}`, inline: true},
-						{name: '100 ', value: `${recentDATA.count100}`, inline: true},
-						{name: '50 ', value: `${recentDATA.count50}`, inline: true},
-						{name: 'Status: ', value: status, inline: true},
-						{name: 'Combo: ', value: `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}`, inline: true})
-					.setImage('https://assets.ppy.sh/beatmaps/' +  `${beatmapDATA.setId}` + '/covers/cover.jpg')
-					.setTimestamp()
-					.setFooter('Made by Xhera & Whiffy', footerImage)
-
-				message.channel.send(beatmapEmbedSS);
-
-				}
-
-				if(`${recentDATA.rank}` == 'B'){
-					const beatmapEmbedB = new Discord.MessageEmbed()
-					.setColor('#3498DB')
-					.setTitle(`${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ` Played by ` + `${userDATA.username}` + ' + ' + modData + ' ['+ starRating + '*' + '] ')
-					.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
-					.setThumbnail('http://s.ppy.sh/a/' +  `${recentDATA.userId}`)
-					.addFields(
-						{name: 'PP: ', value: ppDATA, inline: true},
-						{name: 'PP if FC: ', value: ppDATAFc, inline: true},
-						{name: 'Accuracy : ', value: accuracy, inline: true},
-						{name: 'Rank ', value: `${recentDATA.rank}`, inline: true},
-						{name: 'Score' , value: `${recentDATA.score}`, inline: true},
-						{name: 'Misses ', value: `${recentDATA.countMiss}`, inline: true},
-						{name: '300 ', value: `${recentDATA.count300}`, inline: true},
-						{name: '100 ', value: `${recentDATA.count100}`, inline: true},
-						{name: '50 ', value: `${recentDATA.count50}`, inline: true},
-						{name: 'Status: ', value: status, inline: true},
-						{name: 'Combo: ', value: `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}`, inline: true})
-					.setImage('https://assets.ppy.sh/beatmaps/' +  `${beatmapDATA.setId}` + '/covers/cover.jpg')
-					.setTimestamp()
-					.setFooter('Made by Xhera & Whiffy', footerImage)
-
-				message.channel.send(beatmapEmbedB);
-
-				}
-				if(`${recentDATA.rank}` == 'C'){
-		const beatmapEmbedC = new Discord.MessageEmbed()
-			.setColor('#02fa62')
-			.setTitle(`${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ` Played by ` + `${userDATA.username}` + ' + ' + modData + ' ['+ starRating + '*' + '] ')
-			.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
-			.setThumbnail('http://s.ppy.sh/a/' +  `${recentDATA.userId}`)
-			.addFields(
-				{name: 'PP: ', value: ppDATA, inline: true},
-				{name: 'PP if FC: ', value: ppDATAFc, inline: true},
-				{name: 'Accuracy : ', value: accuracy, inline: true},
-				{name: 'Rank ', value: `${recentDATA.rank}`, inline: true},
-				{name: 'Score' , value: `${recentDATA.score}`, inline: true},
-				{name: 'Misses ', value: `${recentDATA.countMiss}`, inline: true},
-				{name: '300 ', value: `${recentDATA.count300}`, inline: true},
-				{name: '100 ', value: `${recentDATA.count100}`, inline: true},
-				{name: '50 ', value: `${recentDATA.count50}`, inline: true},
-				{name: 'Status: ', value: status, inline: true},
-				{name: 'Combo: ', value: `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}`, inline: true})
-			.setImage('https://assets.ppy.sh/beatmaps/' +  `${beatmapDATA.setId}` + '/covers/cover.jpg')
-			.setTimestamp()
-			.setFooter('Made by Xhera & Whiffy', footerImage)
-
-		message.channel.send(beatmapEmbedC);
-			}
-			if(`${recentDATA.rank}` == 'D'){
-				const beatmapEmbedB = new Discord.MessageEmbed()
-				.setColor('#E74C3C')
-				.setTitle(`${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ` Played by ` + `${userDATA.username}` + ' + ' + modData + ' ['+ starRating + '*' + '] ')
-				.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
-				.setThumbnail('http://s.ppy.sh/a/' +  `${recentDATA.userId}`)
-				.addFields(
-					{name: 'PP: ', value: ppDATA, inline: true},
-					{name: 'PP if FC: ', value: ppDATAFc, inline: true},
-					{name: 'Accuracy : ', value: accuracy, inline: true},
-					{name: 'Rank ', value: `${recentDATA.rank}`, inline: true},
-					{name: 'Score' , value: `${recentDATA.score}`, inline: true},
-					{name: 'Misses ', value: `${recentDATA.countMiss}`, inline: true},
-					{name: '300 ', value: `${recentDATA.count300}`, inline: true},
-					{name: '100 ', value: `${recentDATA.count100}`, inline: true},
-					{name: '50 ', value: `${recentDATA.count50}`, inline: true},
-					{name: 'Status: ', value: status, inline: true},
-					{name: 'Combo: ', value: `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}`, inline: true})
-				.setImage('https://assets.ppy.sh/beatmaps/' +  `${beatmapDATA.setId}` + '/covers/cover.jpg')
-				.setTimestamp()
-				.setFooter('Made by Xhera & Whiffy', footerImage)
-
-			message.channel.send(beatmapEmbedB);
-				}
-				else{
-				const beatmapEmbedC = new Discord.MessageEmbed()
-			.setColor('#02fa62')
-			.setTitle(`${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ` Played by ` + `${userDATA.username}` + ' + ' + modData + ' ['+ starRating + '*' + '] ')
-			.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
-			.setThumbnail('http://s.ppy.sh/a/' +  `${recentDATA.userId}`)
-			.addFields(
-				{name: 'PP: ', value: ppDATA, inline: true},
-				{name: 'PP if FC: ', value: ppDATAFc, inline: true},
-				{name: 'Accuracy : ', value: accuracy, inline: true},
-				{name: 'Rank ', value: `${recentDATA.rank}`, inline: true},
-				{name: 'Score' , value: `${recentDATA.score}`, inline: true},
-				{name: 'Misses ', value: `${recentDATA.countMiss}`, inline: true},
-				{name: '300 ', value: `${recentDATA.count300}`, inline: true},
-				{name: '100 ', value: `${recentDATA.count100}`, inline: true},
-				{name: '50 ', value: `${recentDATA.count50}`, inline: true},
-				{name: 'Status: ', value: status, inline: true},
-				{name: 'Combo: ', value: `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}`, inline: true})
-			.setImage('https://assets.ppy.sh/beatmaps/' +  `${beatmapDATA.setId}` + '/covers/cover.jpg')
-			.setTimestamp()
-			.setFooter('Made by Xhera & Whiffy', footerImage)
-				}
-				if(`${recentDATA.rank}` == 'SH'){
-					const beatmapEmbedB = new Discord.MessageEmbed()
-					.setColor('#BCC0C0')
-					.setTitle(`${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ` Played by ` + `${userDATA.username}` + ' + ' + modData + ' ['+ starRating + '*' + '] ')
-					.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
-					.setThumbnail('http://s.ppy.sh/a/' +  `${recentDATA.userId}`)
-					.addFields(
-						{name: 'PP: ', value: ppDATA, inline: true},
-						{name: 'PP if FC: ', value: ppDATAFc, inline: true},
-						{name: 'Accuracy : ', value: accuracy, inline: true},
-						{name: 'Rank ', value: `${recentDATA.rank}`, inline: true},
-						{name: 'Score' , value: `${recentDATA.score}`, inline: true},
-						{name: 'Misses ', value: `${recentDATA.countMiss}`, inline: true},
-						{name: '300 ', value: `${recentDATA.count300}`, inline: true},
-						{name: '100 ', value: `${recentDATA.count100}`, inline: true},
-						{name: '50 ', value: `${recentDATA.count50}`, inline: true},
-						{name: 'Status: ', value: status, inline: true},
-						{name: 'Combo: ', value: `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}`, inline: true})
-					.setImage('https://assets.ppy.sh/beatmaps/' +  `${beatmapDATA.setId}` + '/covers/cover.jpg')
-					.setTimestamp()
-					.setFooter('Made by Xhera & Whiffy', footerImage)
-	
-				message.channel.send(beatmapEmbedB);
-					}
+	message.channel.send(recentEmbed)
 
 
 })

@@ -6,10 +6,8 @@ const fetch = require ('node-fetch');
 const Nodesu = require('nodesu');
 const mongo = require('./mongo.js')
 
-const token = process.env.token
+token = process.env.token
 
-
-const api = new Nodesu.Client('d2862f44a1269fa8a28a26e9bfa62b94a6ef3317');
 
 // Creating the client and collection for command handling
 const client = new Discord.Client();
@@ -31,7 +29,7 @@ for (const file of commandFiles) {
 client.once('ready', async () => {
     console.log('Bot is Online!');
 
-    client.user.setActivity("poggers", {type: "PLAYING"})
+    client.user.setActivity("The circle game", {type: "PLAYING"})
 
     await mongo().then((mongoose => {
         try {
@@ -61,4 +59,3 @@ client.on('message', message => {
 
 // Log in and start the bot with our Bot token that's in config.json
 client.login(token);
-

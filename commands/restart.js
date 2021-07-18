@@ -1,4 +1,6 @@
-const { token } = require('../config.json');
+//const { token } = require('../config.json');
+
+token = process.env.token
 
 const Discord = require('discord.js');
 const client = new Discord.Client();
@@ -7,7 +9,7 @@ module.exports = {
 	name: 'restart',
 	description: 'Restarts the bot, owners use only',
 	execute(message, args) {
-		
+		if (message.author.id == 179986264982945793 || 273019019869552640) {
         try {
             message.channel.send('Restarting bot...')
             .then (msg => client.destroy())   
@@ -17,6 +19,8 @@ module.exports = {
             console.error(error);
     	    message.reply("Couldn't restart the bot");
         }
-
+        } else {
+            message.reply("You don't have permissions to execute this command!")
+        }
 	},
 };

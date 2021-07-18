@@ -3,7 +3,7 @@ module.exports = {
     description: 'Reloads a command',
     cooldown: 5,
 	execute(message, args) {
-        if (message.author.id === '179986264982945793'|| '273019019869552640') {
+        if (message.author.id == 179986264982945793 || 273019019869552640) {
 			if (!args.length) return message.channel.send(`You didn't pass any command to reload, ${message.author}!`);
         	    const commandName = args[0].toLowerCase();
         	    const command = message.client.commands.get(commandName)
@@ -21,7 +21,7 @@ module.exports = {
         	}
         	message.channel.send(`Command \`${command.name}\` was reloaded!`);
     	} else {
-        	message.channel.send ("You don't have permission to do that.")
+        	message.reply ("You don't have permission to execute this command!")
     	}
 	},
 };
