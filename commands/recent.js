@@ -3,9 +3,10 @@ const mongo = require('../mongo')
 const userSchema = require ('../schemas/test-schema')
 const fs = require('fs');
 const Nodesu = require('nodesu');
-const { token } = require('../config.json')
+//const { apiKey, token } = require('../config.json')
 
-apiKey = process.env.apiKey
+const token = process.env.token
+const apiKey = process.env.apiKey
 
 const { V1, V2, tools } = require('osu-api-extended');
 const v1 = new V1(apiKey)
@@ -135,7 +136,7 @@ api.user
 				const ppDATAFc = data.pp.fc;
 				const starRating = data.stats.star.pure;
 				const modData = data.mods.name
-				const status = data.status.name;
+				const statusRaw = data.status.name;
 				console.log(data);
 
 		
@@ -143,34 +144,63 @@ api.user
 			const rawRank = `${recentDATA.rank}`
 			var footerImage = Math.random() < 0.5 ? "https://i.imgur.com/mDXh9Sd.png" : "https://a.ppy.sh/14459921?1577801006.jpeg";
 			var sidecolor = ('');
+			var Rank =('');
+
+			switch (statusRaw) {
+
+				case 'ranked':
+					status = "<:Ranked:866411450285031434>"
+					break;
+				case 'loved':
+					status = "<:Loved:866411436795101245>"
+					break;
+				case 'approved':
+					status = "<:Approved:866411416156110858>"
+					break;
+				default:
+					status = ''
+					break;
+
+			}
+
+
 			switch(rawRank){
 
 				case 'A':
 					sidecolor = '#2ECC71'
+					Rank = "<:rankingasmall:866411466022060052>"
 				break;
 				case 'B':
 					sidecolor ='#3498DB'
+					Rank = "<:rankingbsmall:866411479140663347>"
 				break;
 				case 'C':
 					sidecolor = '#AD1457'
+					Rank = "<:rankingcsmall:866411493426593823>"
 				break;
 				case 'D':
 					sidecolor = '#E74C3C'
+					Rank = "<:rankingdsmall:866411512619991061>"
 				break;
 				case 'F':
 					sidecolor = '#992D22'
+					Rank = "F"
 				break;
 				case 'S':
 					sidecolor = '#F1C40F'
+					Rank = "<:rankingssmall:866411553531363328>"
 				break;
 				case 'X':
 					sidecolor = '#C27C0E'
+					Rank = "<:rankingxsmall:866411582988222484>"
 				break;
 				case 'SH':
 					sidecolor = '#7F8C8D'
+					Rank = "<:rankingshsmall:866411528511815691>"
 				break;
 				case 'XH':
 					sidecolor = '#BCC0C0'
+					Rank = "<:rankingxhsmall:866411568873734196>"
 				break;
 
 
@@ -188,14 +218,15 @@ api.user
 
 				const recentEmbed = new Discord.MessageEmbed()
 					.setColor(sidecolor)
-					.setTitle(`${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ' + ' + modData + ' ['+ starRating + '*' + '] ')
+					.setTitle(status + ' ' + `${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ' + ' + modData + ' ['+ starRating + '*' + '] ')
+					.setDescription('**Played by [' + userDATA.username + ']**')
 					.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
 					.setThumbnail('http://s.ppy.sh/a/' +  `${recentDATA.userId}`)
 					.addFields(
 						{name: '\u200b', value: '**PP:** ' + ppDATA + fcdata + accuracy + '% accuracy' , inline: true},
-						{name: '\u200b' , value: '**Rank:** ' + `${recentDATA.rank}` +'  **Score:** ' + `${recentDATA.score}`},
-						{name: '\u200b', value: '**Misses:** ' + `${recentDATA.countMiss}` + ', **300:** ' + `${recentDATA.count300}` + ', **100:** ' + `${recentDATA.count100}` + ', **50:** ' + `${recentDATA.count50}`},
-						{name: '\u200b', value: '**Combo:** ' + `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}` + ' **Status:** ' + status + ' ' , inline: true})
+						{name: '\u200b' , value: '**Rank:** ' + Rank +'  **Score:** ' + `${recentDATA.score}`},
+						{name: '\u200b', value: '**Misses** ' + `${recentDATA.countMiss}` + ' ,**300** ' + `${recentDATA.count300}` + ' ,**100** ' + `${recentDATA.count100}` + ' ,**50** ' + `${recentDATA.count50}`},
+						{name: '\u200b', value: '**Combo:** ' + `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}` , inline: true})
 					.setImage('https://assets.ppy.sh/beatmaps/' +  `${beatmapDATA.setId}` + '/covers/cover.jpg')
 					.setTimestamp()
 					.setFooter('Made by Xhera & Whiffy', footerImage)
@@ -295,45 +326,75 @@ else{
 				const ppDATAFc = data.pp.fc;
 				const starRating = data.stats.star.pure;
 				const modData = data.mods.name
-				const status = data.status.name;
+				const statusRaw = data.status.name;
 				console.log(data.status.name);
 
 				const rawRank = `${recentDATA.rank}`
 
 
-				switch(rawRank){
+				var Rank =('');
 
-					case 'A':
-						sidecolor = '#2ECC71'
+			switch (statusRaw) {
+
+				case 'ranked':
+					status = "<:Approved:866411416156110858>"
 					break;
-					case 'B':
-						sidecolor ='#3498DB'
+				case 'loved':
+					status = "<:Loved:866411436795101245>"
 					break;
-					case 'C':
-						sidecolor = '#AD1457'
+				case 'approved':
+					status = "<:Approved:866411416156110858>"
 					break;
-					case 'D':
-						sidecolor = '#E74C3C'
+				default:
+					status = ''
 					break;
-					case 'F':
-						sidecolor = '#992D22'
-					break;
-					case 'S':
-						sidecolor = '#F1C40F'
-					break;
-					case 'X':
-						sidecolor = '#C27C0E'
-					break;
-					case 'SH':
-						sidecolor = '#7F8C8D'
-					break;
-					case 'XH':
-						sidecolor = '#BCC0C0'
-					break;
-	
-	
-	
-				}
+
+			}
+
+
+			switch(rawRank){
+
+				case 'A':
+					sidecolor = '#2ECC71'
+					Rank = "<:rankingasmall:866411466022060052>"
+				break;
+				case 'B':
+					sidecolor ='#3498DB'
+					Rank = "<:rankingbsmall:866411479140663347>"
+				break;
+				case 'C':
+					sidecolor = '#AD1457'
+					Rank = "<:rankingcsmall:866411493426593823>"
+				break;
+				case 'D':
+					sidecolor = '#E74C3C'
+					Rank = "<:rankingdsmall:866411512619991061>"
+				break;
+				case 'F':
+					sidecolor = '#992D22'
+					Rank = "F"
+				break;
+				case 'S':
+					sidecolor = '#F1C40F'
+					Rank = "<:rankingssmall:866411553531363328>"
+				break;
+				case 'X':
+					sidecolor = '#C27C0E'
+					Rank = "<:rankingxsmall:866411582988222484>"
+				break;
+				case 'SH':
+					sidecolor = '#7F8C8D'
+					Rank = "<:rankingshsmall:866411528511815691>"
+				break;
+				case 'XH':
+					sidecolor = '#BCC0C0'
+					Rank = "<:rankingxhsmall:866411568873734196>"
+				break;
+
+
+
+			}
+
 
 				if(data.pp.current === data.pp.fc) {
 					var fcdata = (' with ')
@@ -348,14 +409,14 @@ else{
 		var footerImage = Math.random() < 0.5 ? "https://i.imgur.com/mDXh9Sd.png" : "https://a.ppy.sh/14459921?1577801006.jpeg";
 		const recentEmbed = new Discord.MessageEmbed()
 		.setColor(sidecolor)
-		.setTitle(`${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ' + ' + modData + ' ['+ starRating + '*' + '] ')
+		.setTitle(status + `${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ' + ' + modData + ' ['+ starRating + '*' + '] ' )
 		.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
 		.setThumbnail('http://s.ppy.sh/a/' +  `${recentDATA.userId}`)
 		.addFields(
 			{name: '\u200b', value: '**PP:** ' + ppDATA + fcdata + accuracy + '% accuracy' , inline: true},
-			{name: '\u200b' , value: '**Rank:** ' + `${recentDATA.rank}` +'  **Score:** ' + `${recentDATA.score}`},
-			{name: '\u200b', value: '**Misses:** ' + `${recentDATA.countMiss}` + ', **300:** ' + `${recentDATA.count300}` + ', **100:** ' + `${recentDATA.count100}` + ', **50:** ' + `${recentDATA.count50}`},
-			{name: '\u200b', value: '**Combo:** ' + `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}` + ' **Status:** ' + status + ' ' , inline: true})
+			{name: '\u200b' , value: '**Rank:** ' + Rank +'  **Score:** ' + `${recentDATA.score}`},
+			{name: '\u200b', value: '**Misses** ' + `${recentDATA.countMiss}` + ' ,**300** ' + `${recentDATA.count300}` + ' ,**100** ' + `${recentDATA.count100}` + ' ,**50** ' + `${recentDATA.count50}`},
+			{name: '\u200b', value: '**Combo:** ' + `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}`, inline: true})
 		.setImage('https://assets.ppy.sh/beatmaps/' +  `${beatmapDATA.setId}` + '/covers/cover.jpg')
 		.setTimestamp()
 		.setFooter('Made by Xhera & Whiffy', footerImage)
