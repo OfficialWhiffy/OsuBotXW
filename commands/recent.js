@@ -5,7 +5,7 @@ const fs = require('fs');
 const Nodesu = require('nodesu');
 const { apiKey, token } = require('../config.json')
 
-//const apiKey = process.env.apiKey
+const apiKey = process.env.apiKey
 
 const { V1, V2, tools } = require('osu-api-extended');
 const v1 = new V1(apiKey)
