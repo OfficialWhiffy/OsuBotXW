@@ -2,57 +2,78 @@ const Nodesu = require('nodesu');
 const Discord = require('discord.js');
 const fs = require('fs');
 
-const  apiKey  = process.env.apiKey
+//const { apiKey } = require('../config')
+
+const apiKey = process.env.apiKey
+
+const { V1, V2, tools } = require('osu-api-extended');
+const v1 = new V1(apiKey)
 
 const api = new Nodesu.Client(apiKey,{ parseData : true});
-// ... see docs/Modules:Components - typical usage = api.<component>.<function>();
-// most functions return Promise objects.
 
-// eg: get beatmap data
+//const token = process.env.token
 
 module.exports = {
 	name: 'beatmap',
+    aliases: ['m', 'map'],
 	description: 'look up a beatmap',
 	async execute(message, args) {
 
+        const IDraw = fs.readFileSync('ID.json')
+        
+
         api.beatmaps
-        .getByBeatmapId('2502505')
+        .getByBeatmapId(`${IDraw}`)
         .then(data => {
 
 
         const dataJSON = JSON.stringify(data);
-        fs.writeFileSync('data.json', dataJSON);
+        fs.writeFileSync('mapdata.json', dataJSON);
         const dataBuffer = fs.readFileSync('data.json');
         const stringJSON = dataBuffer.toString();
-        newString = stringJSON.replace(/^(.)|(.)$/g,'');
-        fs.writeFileSync('data.json', newString);
-        const parseDATA = JSON.parse(newString);
+        const parseDATA = JSON.parse(stringJSON);
 
-        console.log(parseDATA.id);
+
+
+        const statusRaw  = `${parseDATA.approved}`
+
+        
+
+			switch (statusRaw) {
+
+				case '1':
+					status = "<:Ranked:866411450285031434>"
+					break;
+				case '4':
+					status = "<:Loved:866411436795101245>"
+					break;
+				case '2':
+					status = "<:Approved:866411416156110858>"
+					break;
+				default:
+					status = ''
+					break;
+
+			}
+
         
             
         var footerImage = Math.random() < 0.5 ? "https://i.imgur.com/mDXh9Sd.png" : "https://a.ppy.sh/14459921?1577801006.jpeg";
 
         const beatmapEmbed = new Discord.MessageEmbed()
-            .setColor('#02fa62')
-            .setTitle(`${parseDATA.title}` + ' - ' + `${parseDATA.artist}` + ' By ' + `${parseDATA.creator}`)
-            .setURL('https://osu.ppy.sh/b/' + `${parseDATA.id}`)
-            .addFields({name: 'Aritist ', value: `${parseDATA.artist}`})
-            .addFields({ name: '\u200B', value: '\u200B' })
+            .setColor('RANDOM')
+            .setTitle(status + ' ' + `${parseDATA.title}` + ' [' + `${parseDATA.version}` + '] ')
+            .setDescription('**Star Difficulty**: ' + `**${parseDATA.difficultyRating.toFixed(2)}**` + '✰')
+            .setURL('https://osu.ppy.sh/b/' + `${parseDATA.beatmapId}`)
+            .setThumbnail('https://b.ppy.sh/thumb/' +  `${parseDATA.setId}` + 'l.jpg')
             .addFields(
-                {name: 'Stars: ', value: `${parseDATA.difficultyRating.toFixed(2)}`, inline: true},
-                {name: 'BPM: ', value: `${parseDATA.bpm}`, inline: true},
-                {name: 'AR ', value: `${parseDATA.diffApproach}`, inline: true},
-                {name: 'CS ' , value: `${parseDATA.diffSize}`, inline: true},
-                {name: 'OD ', value: `${parseDATA.diffOverall}`, inline: true},
-                {name: 'HP ', value: `${parseDATA.diffDrain}`, inline: true})
-            .setImage('https://assets.ppy.sh/beatmaps/' +  `${parseDATA.setId}` + '/covers/cover.jpg')
+                {name: '\u200b', value: '**BPM: **' + `${parseDATA.bpm}` + ' ➠ ' + '**Length: **' + `${parseDATA.totalLength}s` + ' ➠ ' + '**Creator: **' + `${parseDATA.creator}`},
+                {name: '\u200b', value: '**CS:**' + `${parseDATA.diffSize}` + ' ➠ ' + '**AR:**' + `${parseDATA.diffApproach}` + ' ➠ ' + '**OD:**' + `${parseDATA.diffOverall}` + ' ➠ ' + '**HP:**' + `${parseDATA.diffDrain}` + ' ➠ ' + ' **Combo:** '  + `${parseDATA.maxCombo}`, inline: true })
             .setTimestamp()
             .setFooter('Made by Xhera & Whiffy', footerImage)
 
         message.channel.send(beatmapEmbed);
         })
-
-	}
-
+        
+    }
 };

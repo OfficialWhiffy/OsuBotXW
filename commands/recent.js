@@ -3,16 +3,16 @@ const mongo = require('../mongo')
 const userSchema = require ('../schemas/test-schema')
 const fs = require('fs');
 const Nodesu = require('nodesu');
-//const { apiKey, token } = require('../config.json')
+const { apiKey, token } = require('../config.json')
 
-const apiKey = process.env.apiKey
+//const apiKey = process.env.apiKey
 
 const { V1, V2, tools } = require('osu-api-extended');
 const v1 = new V1(apiKey)
 
 const api = new Nodesu.Client(apiKey,{ parseData : true});
 
-const token = process.env.token
+//const token = process.env.token
 
 let osr = require('node-osr')
 
@@ -217,13 +217,13 @@ api.user
 					var fcdata = (' with ')
 				}
 				else {
-					fcdata = ' **->** ' + ppDATAFc + ' with '
+					fcdata = ' **»** ' + ppDATAFc + ' with '
 				}
 
 
 				const recentEmbedJSON = new Discord.MessageEmbed()
 					.setColor(sidecolor)
-					.setTitle(status + ' ' + `${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ' + ' + modData + ' ['+ starRating + '*' + '] ')
+					.setTitle(status + ' ' + `${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ' + ' + modData + ' ['+ `${beatmapDATA.difficultyRating.toFixed(2)}` + '*' + '] ')
 					.setDescription('**Played by [' + userDATA.username + ']**' + ' - ' + ' **Rank:** ' + Rank )
 					.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
 					.setThumbnail('https://b.ppy.sh/thumb/' +  `${beatmapDATA.setId}` + 'l.jpg')
@@ -232,8 +232,17 @@ api.user
 						{name: '\u200b', value:  miss + `:${recentDATA.countMiss}` + ' |' + hit300 + `:${recentDATA.count300}` + ' |' + hit100 + `:${recentDATA.count100}` + ' |' + hit50 + `:${recentDATA.count50}` + ' **Combo:** ' + `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}`, inline: true })
 					.setTimestamp()
 					.setFooter('Made by Xhera & Whiffy', footerImage)
-					//recentEmbedJSON.toJSON()
-					//recentEmbed = JSON.stringify(recentEmbedJSON);
+					recentEmbedJSON.toJSON()
+					const recentEmbed = JSON.stringify(recentEmbedJSON);
+					fs.writeFileSync('embed.json', recentEmbed);
+					const embedBuffer = fs.readFileSync('embed.json');
+					const embedJSON = embedBuffer.toString();
+					const embedDATA = JSON.parse(embedJSON);
+					beatmapID = embedDATA.url.replace('https://osu.ppy.sh/b/', '')
+					fs.writeFileSync('ID.json', beatmapID);
+
+
+					console.log(beatmapID)
 					
 
 				message.channel.send(recentEmbedJSON)
@@ -410,13 +419,13 @@ else{
 					var fcdata = (' with ')
 				}
 				else {
-					fcdata = ' **->** ' + ppDATAFc + ' with '
+					fcdata = ' **»** ' + ppDATAFc + ' with '
 				}
 
 
-				const recentEmbed = new Discord.MessageEmbed()
+				const recentEmbedJSON = new Discord.MessageEmbed()
 					.setColor(sidecolor)
-					.setTitle(status + ' ' + `${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ' + ' + modData + ' ['+ starRating + '*' + '] ')
+					.setTitle(status + ' ' + `${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ' + ' + modData + ' ['+ `${beatmapDATA.difficultyRating.toFixed(2)}` + '*' + '] ')
 					.setDescription('**Played by [' + userDATA.username + ']**' + ' - ' + ' **Rank:** ' + Rank )
 					.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
 					.setThumbnail('https://b.ppy.sh/thumb/' +  `${beatmapDATA.setId}` + 'l.jpg')
@@ -425,8 +434,18 @@ else{
 						{name: '\u200b', value:  miss + `:${recentDATA.countMiss}` + ' |' + hit300 + `:${recentDATA.count300}` + ' |' + hit100 + `:${recentDATA.count100}` + ' |' + hit50 + `:${recentDATA.count50}` + ' **Combo:** ' + `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}`, inline: true })
 					.setTimestamp()
 					.setFooter('Made by Xhera & Whiffy', footerImage)
+					recentEmbedJSON.toJSON()
+					const recentEmbed = JSON.stringify(recentEmbedJSON);
+					fs.writeFileSync('embed.json', recentEmbed);
+					const embedBuffer = fs.readFileSync('embed.json');
+					const embedJSON = embedBuffer.toString();
+					const embedDATA = JSON.parse(embedJSON);
+					beatmapID = embedDATA.url.replace('https://osu.ppy.sh/b/', '')
 
-				message.channel.send(recentEmbed)
+					console.log(beatmapID)
+					
+
+				message.channel.send(recentEmbedJSON)
 
 
 })
