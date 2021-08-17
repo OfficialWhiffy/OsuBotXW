@@ -15,7 +15,6 @@ const scoresSchema = require("../schemas/score-schema")
 
 const { V1, V2, tools } = require('osu-api-extended');
 const v1 = new V1(apiKey)
-const v2 = new V2('9029', 'EMbPBUB1dQPmucdYkEO8cOmIrKQnlggGyWpXhK8p');
 
 const api = new Nodesu.Client(apiKey,{ parseData : true});
 
