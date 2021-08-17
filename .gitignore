@@ -8,4 +8,5 @@ mapdata.json
 recent.json
 user.json
 config.json
+.env
 
