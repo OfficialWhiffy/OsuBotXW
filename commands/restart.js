@@ -1,4 +1,6 @@
-const { token } = require('../config.json');
+const dotenv = require('dotenv');
+dotenv.config();
+token = process.env.token
 
 const Discord = require('discord.js');
 const client = new Discord.Client();
