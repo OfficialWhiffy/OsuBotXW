@@ -1,6 +1,6 @@
 const mongo = require('../mongo')
 const Discord = require('discord.js')
-const welcomeSchema = require('../schemas/test-schema')
+const welcomeSchema = require('../schemas/user-schema')
 const fs = require('fs');
 const Nodesu = require('nodesu');
 const { apiKey } = require('../config')

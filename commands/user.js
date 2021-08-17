@@ -1,9 +1,9 @@
 const Discord = require('discord.js');
 const mongo = require('../mongo')
-const userSchema = require ('../schemas/test-schema')
+const userSchema = require ('../schemas/user-schema')
 const fs = require('fs');
 const Nodesu = require('nodesu');
-const apiKey  = process.env.apiKey
+const { apiKey } = require('../config.json');
 
 const api = new Nodesu.Client(apiKey,{ parseData : true});
 

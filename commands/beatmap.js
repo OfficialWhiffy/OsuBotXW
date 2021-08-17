@@ -2,16 +2,12 @@ const Nodesu = require('nodesu');
 const Discord = require('discord.js');
 const fs = require('fs');
 
-//const { apiKey } = require('../config')
-
-const apiKey = process.env.apiKey
+const { apiKey } = require('../config')
 
 const { V1, V2, tools } = require('osu-api-extended');
 const v1 = new V1(apiKey)
 
 const api = new Nodesu.Client(apiKey,{ parseData : true});
-
-//const token = process.env.token
 
 module.exports = {
 	name: 'beatmap',

@@ -1,11 +1,15 @@
 const Discord = require('discord.js');
 const mongo = require('../mongo')
-const userSchema = require ('../schemas/test-schema')
+const userSchema = require ('../schemas/user-schema')
 const fs = require('fs');
 const Nodesu = require('nodesu');
-//const { apiKey, token } = require('../config.json')
+const { apiKey, token } = require('../config.json')
+const scoresSchema = require("../schemas/score-schema")
+const client = new Discord.Client();
+const oj = require('ojsama');
+const curl = require('curl');
 
-const apiKey = process.env.apiKey
+//const apiKey = process.env.apiKey
 
 const { V1, V2, tools } = require('osu-api-extended');
 const v1 = new V1(apiKey)
@@ -14,7 +18,8 @@ const api = new Nodesu.Client(apiKey,{ parseData : true});
 
 //const token = process.env.token
 
-let osr = require('node-osr')
+let osr = require('node-osr');
+const scoreSchema = require('../schemas/score-schema');
 
 module.exports = {
 	name: 'recent',
@@ -51,7 +56,7 @@ module.exports = {
                     cache[member.id] = data = [result.text]
 					
                 } finally {
-                    mongoose.connection.close()
+					mongoose.connection.close()
                 }
             
 
@@ -65,7 +70,8 @@ api.user
 			message.channel.send("No recent play found in the last 24h")
 			return;
 		}
-		
+
+
 
 
 		const dataJSON = JSON.stringify(recentData);
@@ -106,6 +112,7 @@ api.user
                 const userDATA = JSON.parse(stringJSON);
         
                 console.log(message.author.username + " called recent play for user " + userDATA.username);
+				console.log(userData)
 
 		api.beatmaps
 		.getByBeatmapId(`${recentDATA.beatmapId}`)
@@ -181,11 +188,11 @@ api.user
 				break;
 				case 'C':
 					sidecolor = '#AD1457'
-					Rank = "<:C_:868226433259028530>"
+					Rank = "<:C_:868515923357753354>"
 				break;
 				case 'D':
 					sidecolor = '#E74C3C'
-					Rank = "<:D_:868226432868974644>"
+					Rank = "<:D_:868515923315810364>"
 				break;
 				case 'F':
 					sidecolor = '#992D22'
@@ -193,7 +200,7 @@ api.user
 				break;
 				case 'S':
 					sidecolor = '#F1C40F'
-					Rank = "<:S_:868226433284206712>"
+					Rank = "<:S_:868515923823329280>"
 				break;
 				case 'X':
 					sidecolor = '#C27C0E'
@@ -201,35 +208,146 @@ api.user
 				break;
 				case 'SH':
 					sidecolor = '#7F8C8D'
-					Rank = "<:SH:868226433275822170>"
+					Rank = "<:SH:868515923936563261>"
 				break;
 				case 'XH':
 					sidecolor = '#BCC0C0'
-					Rank = "<:XH:868226433036714095>"
+					Rank = "<:XH:868515923781369898>"
 				break;
 
 
 
 			}
 
-
 				if(data.pp.current === data.pp.fc) {
 					var fcdata = (' with ')
 				}
 				else {
-					fcdata = ' **»** ' + ppDATAFc + ' with '
+					fcdata = ' **»** ' + ppDATAFc + 'PP with '
 				}
 
 
+
+				curl.get(`https://osu.ppy.sh/osu/${recentDATA.beatmapId}`, async function(err, response, body) {
+				mods = oj.modbits.from_string(data.mods.name);
+				combo = parseInt(recentDATA.maxCombo);
+				nmiss = parseInt(recentDATA.countMiss);
+
+				
+
+				const parser = new oj.parser().feed(body);
+
+				const pMap = parser.map;
+
+				const stars = new oj.diff().calc({ map: pMap, mods: mods });
+				const star = stars.toString().split(' ');
+				console.log(star[0])
+
+				const hitobj = [];
+
+
+
+				const yhit300 = count300;
+				const yhit100 = count100;
+				const yhit50 = count50;
+				const yhitmiss = countMiss;
+				const totalhits = yhit300 + yhit100 + yhit50 + yhitmiss;
+
+				const numobj = totalhits - 1;
+
+				const num = pMap.objects.length;
+
+				pMap.objects.forEach(obj => {
+					hitobj.push(obj.time);
+				});
+
+				const timing = hitobj[num - 1] - hitobj[0];
+				const point = hitobj[numobj] - hitobj[0];
+
+				const mapCompletion = (point / timing) * 100;
+	
+					console.log(mapCompletion.toFixed(2))
+
+
+
+
+                const connectToMongoDB = async () =>{
+                await mongo().then(async (mongoose) =>{
+                    try{
+
+						console.log('Saving ID')
+                        const scoresID = {
+							beatmapIDScore: `${recentDATA.beatmapId}`,
+							channelId: channel.id
+						}
+
+						if(!scoresID){
+							message.channel.send("Data couldn't be saved")
+							return;
+						}
+
+						await scoresSchema.findOneAndUpdate({channelId: channel.id}, {beatmapIDScore: recentDATA.beatmapId}, {upsert: true})
+
+
+
+                    } finally{
+                        mongoose.connection.close()
+                    }
+                })
+			}
+
+			connectToMongoDB()
+
+
+
+			if(rawRank === 'F'){
+
 				const recentEmbedJSON = new Discord.MessageEmbed()
+					.setAuthor(`Recent play for: ${userDATA.username}`, `http://a.ppy.sh/${userDATA.id}`, `https://osu.ppy.sh/u/${userDATA.id}`)
 					.setColor(sidecolor)
-					.setTitle(status + ' ' + `${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ' + ' + modData + ' ['+ `${beatmapDATA.difficultyRating.toFixed(2)}` + '*' + '] ')
-					.setDescription('**Played by [' + userDATA.username + ']**' + ' - ' + ' **Rank:** ' + Rank )
+					.setTitle('')
+					
+					.setDescription(status + '** ' + `${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ' + ' + modData + ' ['+ star[0] + '*' + ']** '+
+									'\n' + '\n' +'**Rank: **' + Rank  +
+									'\n**PP:** ' + ppDATA + fcdata + accuracy + '%' +'  **Score:** ' + `${recentDATA.score}` +
+									'\n' + '**Hits:**' + miss + `: ${recentDATA.countMiss}` + ' | ' + hit300 + `: ${recentDATA.count300}` + ' | ' + hit100 + `: ${recentDATA.count100}` + ' | ' + hit50 + `: ${recentDATA.count50}`  +
+									'\n' + '**Map completion:** ' + mapCompletion.toFixed(2) + '%' + 
+									'\n**Combo:** ' + `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}x`  
+									+ '\n[**Map link**](https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`+ ')', 'https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
+
+
 					.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
+					.setThumbnail('http://a.ppy.sh/' + `${userDATA.id}`)
+					.setImage('https://assets.ppy.sh/beatmaps/' +  `${beatmapDATA.setId}` + '/covers/cover.jpg')
+					
+					
+					.setTimestamp()
+					.setFooter('Made by Xhera & Whiffy', footerImage)
+					message.channel.send(recentEmbedJSON)
+					return;
+
+
+			}
+
+
+
+				
+
+
+			const recentEmbedJSON = new Discord.MessageEmbed()
+					.setColor(sidecolor)
+					.setTitle('')
 					.setThumbnail('https://b.ppy.sh/thumb/' +  `${beatmapDATA.setId}` + 'l.jpg')
-					.addFields(
-						{name: '\u200b', value: '**PP:** ' + ppDATA + fcdata + accuracy + '%' +'  **Score:** ' + `${recentDATA.score}`, inline: false},
-						{name: '\u200b', value:  miss + `:${recentDATA.countMiss}` + ' |' + hit300 + `:${recentDATA.count300}` + ' |' + hit100 + `:${recentDATA.count100}` + ' |' + hit50 + `:${recentDATA.count50}` + ' **Combo:** ' + `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}`, inline: true })
+					.setDescription(status + '** ' + `${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ' + ' + modData + ' ['+ star[0] + '*' + ']** ' + 
+									'\n'+ '\n' + '**Rank: **' + Rank  +
+									'\n**PP:** ' + ppDATA + fcdata + accuracy + '%' +'  **Score:** ' + `${recentDATA.score}` +
+									'\n' + '**Hits:**' + miss + `: ${recentDATA.countMiss}` + ' | ' + hit300 + `: ${recentDATA.count300}` + ' | ' + hit100 + `: ${recentDATA.count100}` + ' | ' + hit50 + `: ${recentDATA.count50}`  +
+									'\n**Combo:** ' + `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}x`
+									+ '\n[**Map link**](https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`+ ')')
+
+					.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
+					.setImage('https://assets.ppy.sh/beatmaps/' +  `${beatmapDATA.setId}` + '/covers/cover.jpg')
+					
 					.setTimestamp()
 					.setFooter('Made by Xhera & Whiffy', footerImage)
 					recentEmbedJSON.toJSON()
@@ -238,15 +356,11 @@ api.user
 					const embedBuffer = fs.readFileSync('embed.json');
 					const embedJSON = embedBuffer.toString();
 					const embedDATA = JSON.parse(embedJSON);
-					beatmapID = embedDATA.url.replace('https://osu.ppy.sh/b/', '')
-					fs.writeFileSync('ID.json', beatmapID);
-
-
-					console.log(beatmapID)
 					
 
 				message.channel.send(recentEmbedJSON)
-				
+
+					})
 				})
 			})
 	
@@ -340,7 +454,7 @@ else{
 				const ppDATAFc = data.pp.fc;
 				const starRating = data.stats.star.pure;
 				const modData = data.mods.name
-				console.log(data.status.name);
+				console.log(data);
 
 
 				const rawRank = `${recentDATA.rank}`
@@ -383,11 +497,11 @@ else{
 				break;
 				case 'C':
 					sidecolor = '#AD1457'
-					Rank = "<:C_:868226433259028530>"
+					Rank = "<:C_:868515923357753354>"
 				break;
 				case 'D':
 					sidecolor = '#E74C3C'
-					Rank = "<:D_:868226432868974644>"
+					Rank = "<:D_:868515923315810364>"
 				break;
 				case 'F':
 					sidecolor = '#992D22'
@@ -395,7 +509,7 @@ else{
 				break;
 				case 'S':
 					sidecolor = '#F1C40F'
-					Rank = "<:S_:868226433284206712>"
+					Rank = "<:S_:868515923823329280>"
 				break;
 				case 'X':
 					sidecolor = '#C27C0E'
@@ -403,49 +517,122 @@ else{
 				break;
 				case 'SH':
 					sidecolor = '#7F8C8D'
-					Rank = "<:SH:868226433275822170>"
+					Rank = "<:SH:868515923936563261>"
 				break;
 				case 'XH':
 					sidecolor = '#BCC0C0'
-					Rank = "<:XH:868226433036714095>"
+					Rank = "<:XH:868515923781369898>"
 				break;
 
 
 
 			}
 
+			const hitobj = [];
+
+			const num = data.combo;
+
+			const numobj = data.req.combo - 1;
+
+			const timing = hitobj[num - 1] - hitobj[0];
+				const point = hitobj[numobj] - hitobj[0];
+
+				const mapCompletion = (point / timing) * 100;
+
+				console.log(mapCompletion)
+
 
 				if(data.pp.current === data.pp.fc) {
 					var fcdata = (' with ')
 				}
 				else {
-					fcdata = ' **»** ' + ppDATAFc + ' with '
+					fcdata = ' **»** ' + ppDATAFc + 'PP with '
 				}
 
+				const connectToMongoDB = async () =>{
+					await mongo().then(async (mongoose) =>{
+						try{
+	
+							console.log('Saving ID')
+							const scoresID = {
+								beatmapIDScore: recentDATA.beatmapId,
+								channelId: channel.id
+							}
+	
+							if(!scoresID){
+								message.channel.send("Data couldn't be saved")
+								return;
+							}
+	
+							await scoresSchema.findOneAndUpdate({channelId: channel.id}, {beatmapIDScore: recentDATA.beatmapId}, {upsert: true})
+	
+	
+	
+						} finally{
+							mongoose.connection.close()
+						}
+					})
+				}
+	
+				connectToMongoDB()
 
-				const recentEmbedJSON = new Discord.MessageEmbed()
-					.setColor(sidecolor)
-					.setTitle(status + ' ' + `${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ' + ' + modData + ' ['+ `${beatmapDATA.difficultyRating.toFixed(2)}` + '*' + '] ')
-					.setDescription('**Played by [' + userDATA.username + ']**' + ' - ' + ' **Rank:** ' + Rank )
-					.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
-					.setThumbnail('https://b.ppy.sh/thumb/' +  `${beatmapDATA.setId}` + 'l.jpg')
-					.addFields(
-						{name: '\u200b', value: '**PP:** ' + ppDATA + fcdata + accuracy + '%' +'  **Score:** ' + `${recentDATA.score}`, inline: false},
-						{name: '\u200b', value:  miss + `:${recentDATA.countMiss}` + ' |' + hit300 + `:${recentDATA.count300}` + ' |' + hit100 + `:${recentDATA.count100}` + ' |' + hit50 + `:${recentDATA.count50}` + ' **Combo:** ' + `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}`, inline: true })
-					.setTimestamp()
-					.setFooter('Made by Xhera & Whiffy', footerImage)
-					recentEmbedJSON.toJSON()
-					const recentEmbed = JSON.stringify(recentEmbedJSON);
-					fs.writeFileSync('embed.json', recentEmbed);
-					const embedBuffer = fs.readFileSync('embed.json');
-					const embedJSON = embedBuffer.toString();
-					const embedDATA = JSON.parse(embedJSON);
-					beatmapID = embedDATA.url.replace('https://osu.ppy.sh/b/', '')
 
-					console.log(beatmapID)
+				if(rawRank === 'F'){
+
+					const recentEmbedJSON = new Discord.MessageEmbed()
+						.setColor(sidecolor)
+						.setTitle('')
+						.setThumbnail('https://b.ppy.sh/thumb/' +  `${beatmapDATA.setId}` + 'l.jpg')
+						.setDescription(status + '** ' + `${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ' + ' + modData + ' ['+ star[0] + '*' + ']** ' + 
+										'\n' +
+										'\n**PP:** ' + ppDATA + fcdata + accuracy + '%' +'  **Score:** ' + `${recentDATA.score}` +
+										'\n' + '**Hits:**' + miss + `: ${recentDATA.countMiss}` + ' | ' + hit300 + `: ${recentDATA.count300}` + ' | ' + hit100 + `: ${recentDATA.count100}` + ' | ' + hit50 + `: ${recentDATA.count50}`  +
+										'\n' + '**Map completion:** ' + mapCompletion.toFixed(2) + '%' + 
+										'\n**Combo:** ' + `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}x` +
+										'[Map link](https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`+ ')')
+	
+	
+						.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
+						.setImage('https://b.ppy.sh/thumb/' +  `${beatmapDATA.setId}` + 'l.jpg')
+						
+						.setTimestamp()
+						.setFooter('Made by Xhera & Whiffy', footerImage)
+						message.channel.send(recentEmbedJSON)
+						return;
+	
+	
+				}
+	
+	
+	
 					
-
-				message.channel.send(recentEmbedJSON)
+	
+	
+				const recentEmbedJSON = new Discord.MessageEmbed()
+						.setColor(sidecolor)
+						.setTitle('')
+						.setThumbnail('https://b.ppy.sh/thumb/' +  `${beatmapDATA.setId}` + 'l.jpg')
+						.setDescription(status + '** ' + `${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ' + ' + modData + ' ['+ star[0] + '*' + ']** ' + 
+										'\n'+
+										'\n**PP:** ' + ppDATA + fcdata + accuracy + '%' +'  **Score:** ' + `${recentDATA.score}` +
+										'\n' + '**Hits:**' + miss + `: ${recentDATA.countMiss}` + ' | ' + hit300 + `: ${recentDATA.count300}` + ' | ' + hit100 + `: ${recentDATA.count100}` + ' | ' + hit50 + `: ${recentDATA.count50}`  +
+										'\n**Combo:** ' + `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}x`
+										+ '\n[**Map link**](https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`+ ')')
+	
+						.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
+						.setImage('https://b.ppy.sh/thumb/' +  `${beatmapDATA.setId}` + 'l.jpg')
+						
+						.setTimestamp()
+						.setFooter('Made by Xhera & Whiffy', footerImage)
+						recentEmbedJSON.toJSON()
+						const recentEmbed = JSON.stringify(recentEmbedJSON);
+						fs.writeFileSync('embed.json', recentEmbed);
+						const embedBuffer = fs.readFileSync('embed.json');
+						const embedJSON = embedBuffer.toString();
+						const embedDATA = JSON.parse(embedJSON);
+						
+	
+					message.channel.send(recentEmbedJSON)
 
 
 })

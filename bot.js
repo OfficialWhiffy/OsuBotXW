@@ -1,13 +1,19 @@
 // Requirements for the bot to work, stuff like discord.js and some things we call things from other places in the files
 const fs = require('fs');
 const Discord = require('discord.js');
-const { prefix, osuOAuth2Key, osuClientSecret, osuClientId } = require('./config.json');
+const { prefix, token, osuOAuth2Key, osuClientSecret, osuClientId } = require('./config.json');
 const fetch = require ('node-fetch');
 const Nodesu = require('nodesu');
 const mongo = require('./mongo.js')
 
-token = process.env.token
 
+const api = new Nodesu.Client('d2862f44a1269fa8a28a26e9bfa62b94a6ef3317');
+
+//token = process.env.token
+
+// v KEEP THESE TWO LINES FOR THE ACTUAL BOT ^ //
+
+//const api = new Nodesu.Client(apiKey);
 
 // Creating the client and collection for command handling
 const client = new Discord.Client();
