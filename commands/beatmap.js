@@ -2,7 +2,11 @@ const Nodesu = require('nodesu');
 const Discord = require('discord.js');
 const fs = require('fs');
 
-const { apiKey } = require('../config')
+//const { apiKey } = require('../config')
+const dotenv = require('dotenv');
+dotenv.config();
+
+const apiKey = process.env.apiKey
 
 const { V1, V2, tools } = require('osu-api-extended');
 const v1 = new V1(apiKey)

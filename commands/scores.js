@@ -5,13 +5,15 @@ const mongo = require('../mongo')
 const userSchema = require ('../schemas/user-schema')
 const fs = require('fs');
 const Nodesu = require('nodesu');
-const { apiKey, token } = require('../config.json')
+//const { apiKey, token } = require('../config.json')
 const osu = require('node-osu');
 const timeago = require('timeago.js')
 const scoresSchema = require("../schemas/score-schema")
+const dotenv = require('dotenv');
+dotenv.config();
 
 
-//const apiKey = process.env.apiKey
+const apiKey = process.env.apiKey
 
 const { V1, V2, tools } = require('osu-api-extended');
 const v1 = new V1(apiKey)
@@ -25,7 +27,7 @@ const osuApi = new osu.Api(apiKey, {
 	parseNumeric: false // Parse numeric values into numbers/floats, excluding ids
 });
 
-//const token = process.env.token
+const token = process.env.token
 
 let osr = require('node-osr');
 const { parse } = require('path');

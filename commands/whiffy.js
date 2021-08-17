@@ -3,7 +3,12 @@ const Discord = require('discord.js')
 const welcomeSchema = require('../schemas/user-schema')
 const fs = require('fs');
 const Nodesu = require('nodesu');
-const { apiKey } = require('../config')
+//const { apiKey } = require('../config')
+
+const dotenv = require('dotenv');
+dotenv.config();
+
+const apiKey = process.env.apiKey
 
 const api = new Nodesu.Client(apiKey,{ parseData : true});
 

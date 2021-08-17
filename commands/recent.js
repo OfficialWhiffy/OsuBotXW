@@ -3,20 +3,22 @@ const mongo = require('../mongo')
 const userSchema = require ('../schemas/user-schema')
 const fs = require('fs');
 const Nodesu = require('nodesu');
-const { apiKey, token } = require('../config.json')
+//const { apiKey, token } = require('../config.json')
 const scoresSchema = require("../schemas/score-schema")
 const client = new Discord.Client();
 const oj = require('ojsama');
 const curl = require('curl');
+const dotenv = require('dotenv');
+dotenv.config();
 
-//const apiKey = process.env.apiKey
+const apiKey = process.env.apiKey
 
 const { V1, V2, tools } = require('osu-api-extended');
 const v1 = new V1(apiKey)
 
 const api = new Nodesu.Client(apiKey,{ parseData : true});
 
-//const token = process.env.token
+const token = process.env.token
 
 let osr = require('node-osr');
 const scoreSchema = require('../schemas/score-schema');

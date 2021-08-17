@@ -26,6 +26,7 @@
     "discord.js": "^12.5.3",
     "discord.js-collector": "^1.8.8",
     "discord.js-v11": "^12.1.1",
+    "dotenv": "^10.0.0",
     "eslint": "^7.29.0",
     "ffmpeg-static": "^4.2.7",
     "lzma-native": "^8.0.1",
