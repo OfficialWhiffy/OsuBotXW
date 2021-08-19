@@ -156,9 +156,9 @@ api.user
 			var sidecolor = ('');
 			var Rank =('');
 			var miss = "<:miss:868232869607247912>"
-			var hit50 = "<:50_:868520483186933820>"
-			var hit100 = "<:100_:868520483216302080>"
-			var hit300 = "<:300_:868520482977235046>"
+			var hit50 = "<:50_:878033880844746782>"
+			var hit100 = "<:100_:878032224505700372>"
+			var hit300 = "<:300_:878032224363094017>"
 
 			switch (statusRaw) {
 
@@ -312,7 +312,7 @@ api.user
 					.setDescription(status + '** ' + `${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ' + ' + modData + ' ['+ star[0] + '*' + ']** '+
 									'\n' + '\n' +'**Rank: **' + Rank  +
 									'\n**PP:** ' + ppDATA + fcdata + accuracy + '%' +'  **Score:** ' + `${recentDATA.score}` +
-									'\n' + '**Hits:**' + miss + `: ${recentDATA.countMiss}` + ' | ' + hit300 + `: ${recentDATA.count300}` + ' | ' + hit100 + `: ${recentDATA.count100}` + ' | ' + hit50 + `: ${recentDATA.count50}`  +
+									'\n' + '**Hits:**' + miss + `${recentDATA.countMiss}` + ' |' + hit300 + `${recentDATA.count300}` + ' |' + hit100 + `${recentDATA.count100}` + ' |' + hit50 + `${recentDATA.count50}`  +
 									'\n' + '**Map completion:** ' + mapCompletion.toFixed(2) + '%' + 
 									'\n**Combo:** ' + `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}x`  
 									+ '\n[**Map link**](https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`+ ')', 'https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
@@ -338,8 +338,8 @@ api.user
 
 			const recentEmbedJSON = new Discord.MessageEmbed()
 					.setColor(sidecolor)
+					.setAuthor(`Recent play for: ${userDATA.username}`, `http://a.ppy.sh/${userDATA.id}`, `https://osu.ppy.sh/u/${userDATA.id}`)
 					.setTitle('')
-					.setThumbnail('https://b.ppy.sh/thumb/' +  `${beatmapDATA.setId}` + 'l.jpg')
 					.setDescription(status + '** ' + `${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ' + ' + modData + ' ['+ star[0] + '*' + ']** ' + 
 									'\n'+ '\n' + '**Rank: **' + Rank  +
 									'\n**PP:** ' + ppDATA + fcdata + accuracy + '%' +'  **Score:** ' + `${recentDATA.score}` +
@@ -348,6 +348,7 @@ api.user
 									+ '\n[**Map link**](https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`+ ')')
 
 					.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
+					.setThumbnail('http://a.ppy.sh/' + `${userDATA.id}`)
 					.setImage('https://assets.ppy.sh/beatmaps/' +  `${beatmapDATA.setId}` + '/covers/cover.jpg')
 					
 					.setTimestamp()
@@ -465,9 +466,9 @@ else{
 			var sidecolor = ('');
 			var Rank =('');
 			var miss = "<:miss:868232869607247912>"
-			var hit50 = "<:50_:868520483186933820>"
-			var hit100 = "<:100_:868520483216302080>"
-			var hit300 = "<:300_:868520482977235046>"
+			var hit50 = "<:50_:878033880844746782>"
+			var hit100 = "<:100_:878032224505700372>"
+			var hit300 = "<:300_:878032224363094017>"
 
 			switch (statusRaw) {
 
@@ -481,7 +482,7 @@ else{
 					status = "<:Approved:866411416156110858>"
 					break;
 				default:
-					status = ''
+					status = ' ? '
 					break;
 
 			}
@@ -583,18 +584,19 @@ else{
 
 					const recentEmbedJSON = new Discord.MessageEmbed()
 						.setColor(sidecolor)
+						.setAuthor(`Recent play for: ${userDATA.username}`, `http://a.ppy.sh/${userDATA.id}`, `https://osu.ppy.sh/u/${userDATA.id}`)
 						.setTitle('')
-						.setThumbnail('https://b.ppy.sh/thumb/' +  `${beatmapDATA.setId}` + 'l.jpg')
 						.setDescription(status + '** ' + `${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ' + ' + modData + ' ['+ star[0] + '*' + ']** ' + 
 										'\n' +
 										'\n**PP:** ' + ppDATA + fcdata + accuracy + '%' +'  **Score:** ' + `${recentDATA.score}` +
-										'\n' + '**Hits:**' + miss + `: ${recentDATA.countMiss}` + ' | ' + hit300 + `: ${recentDATA.count300}` + ' | ' + hit100 + `: ${recentDATA.count100}` + ' | ' + hit50 + `: ${recentDATA.count50}`  +
+										'\n' + '**Hits:**' + miss + `${recentDATA.countMiss}` + ' | ' + hit300 + `${recentDATA.count300}` + ' | ' + hit100 + `${recentDATA.count100}` + ' | ' + hit50 + `${recentDATA.count50}`  +
 										'\n' + '**Map completion:** ' + mapCompletion.toFixed(2) + '%' + 
 										'\n**Combo:** ' + `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}x` +
 										'[Map link](https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`+ ')')
 	
 	
 						.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
+						.setThumbnail('http://a.ppy.sh/' + `${userDATA.id}`)
 						.setImage('https://b.ppy.sh/thumb/' +  `${beatmapDATA.setId}` + 'l.jpg')
 						
 						.setTimestamp()
@@ -612,8 +614,8 @@ else{
 	
 				const recentEmbedJSON = new Discord.MessageEmbed()
 						.setColor(sidecolor)
+						.setAuthor(`Recent play for: ${userDATA.username}`, `http://a.ppy.sh/${userDATA.id}`, `https://osu.ppy.sh/u/${userDATA.id}`)
 						.setTitle('')
-						.setThumbnail('https://b.ppy.sh/thumb/' +  `${beatmapDATA.setId}` + 'l.jpg')
 						.setDescription(status + '** ' + `${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ' + ' + modData + ' ['+ star[0] + '*' + ']** ' + 
 										'\n'+
 										'\n**PP:** ' + ppDATA + fcdata + accuracy + '%' +'  **Score:** ' + `${recentDATA.score}` +
@@ -622,6 +624,7 @@ else{
 										+ '\n[**Map link**](https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`+ ')')
 	
 						.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
+						.setThumbnail('http://a.ppy.sh/' + `${userDATA.id}`)
 						.setImage('https://b.ppy.sh/thumb/' +  `${beatmapDATA.setId}` + 'l.jpg')
 						
 						.setTimestamp()
