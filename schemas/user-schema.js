@@ -7,8 +7,8 @@ const reqString = {
 
 const userSchema = mongoose.Schema({
 
-    _id: reqString,
-    channelId: reqString,
+    _id: Number,
+    memId: reqString,
     text: reqString
 })
 
