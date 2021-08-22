@@ -34,7 +34,7 @@ const { parse } = require('path');
 
 module.exports = {
 	name: 'scores',
-    aliases: ['c', 'sc'],
+    aliases: ['c', 'score'],
 	description: 'Loads all scores for a given map',
 	async execute(message, args) {
 
@@ -53,7 +53,7 @@ module.exports = {
             console.log('FETCHING FROM DATABASE')
             await mongo().then(async mongoose => {
                  try {
-                    const result = await userSchema.findOne({ _id: member.id })
+                    const result = await userSchema.findOne({ _id: channel.id })
 
                     if(!result){
 						message.channel.send("No user found set user using '.setuser <username or userid>' ")

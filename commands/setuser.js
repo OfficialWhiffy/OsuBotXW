@@ -37,12 +37,12 @@ module.exports = {
             try{
                await userSchema.findOneAndUpdate(
                {
-                   _id: member.id
+                _id: channel.id
                }, 
                {
                 
-                    _id: member.id,
-                    channelId: channel.id,
+                    _id: channel.id,
+                  memId: member.id,
                     text, 
                }, 
                {
@@ -55,30 +55,21 @@ module.exports = {
             }
         })
 
-        const onJoin = async member => {
-
-            let data = cache[member.id]
+        let data = cache[member.id]
 
             if(!data) {
 
                 console.log('FETCHING FROM DATABASE')
                 await mongo().then(async (mongoose) =>{
                     try{
-                        const result = await userSchema.findOne({ _id: member.id})
+                        const result = await userSchema.findOne({ _id: channel.id})
 
-                        cache[member.id] = [result.channelId, result.text]
+                        cache[channel.id] = [result.memId, result.text]
 
                     } finally{
                         mongoose.connection.close()
                     }
                 })
-            }
-
-            const channelId = data[0]
-            const text = data[1]
-
-            const channel = guild.channels.cache.get(channelId)
-            channel.reply(text)
 
         }
 

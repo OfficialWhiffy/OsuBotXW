@@ -48,7 +48,7 @@ module.exports = {
             console.log('FETCHING FROM DATABASE')
             await mongo().then(async mongoose => {
                  try {
-                    const result = await userSchema.findOne({ _id: member.id })
+                    const result = await userSchema.findOne({ _id: channel.id })
 
 					if(!result){
 						message.channel.send("No user found set user using '.setuser <username or userid>' ")
