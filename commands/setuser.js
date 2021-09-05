@@ -37,12 +37,12 @@ module.exports = {
             try{
                await userSchema.findOneAndUpdate(
                {
-                _id: channel.id
+                memId: member.id
                }, 
                {
                 
-                    _id: channel.id,
-                  memId: member.id,
+                    channelId: channel.id,
+                    memId: member.id,
                     text, 
                }, 
                {
@@ -62,7 +62,7 @@ module.exports = {
                 console.log('FETCHING FROM DATABASE')
                 await mongo().then(async (mongoose) =>{
                     try{
-                        const result = await userSchema.findOne({ _id: channel.id})
+                        const result = await userSchema.findOne({ channelId: channel.id})
 
                         cache[channel.id] = [result.memId, result.text]
 

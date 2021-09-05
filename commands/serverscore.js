@@ -54,7 +54,7 @@ module.exports = {
 						console.log('Grabbing users')
 						
                         const result = await userSchema.find({
-                            _id: channel.id})
+                            channelId: channel.id})
 
                         data = result
 
@@ -89,12 +89,8 @@ module.exports = {
                 })
 
 
-                console.log(data[0].text)
-                console.log(idData[0])
-
-
                 if(!Object.keys(data).length) {
-                    message.channel.send("No members found!")
+                    message.channel.send("No members have set this server as their main server! To do this use the `.setuser` command in this server!")
                     return;
                 }
 
@@ -155,17 +151,6 @@ module.exports = {
 
                         v1.scores({ b: idData[0], u: data[1].text, limit: 1 })
                     .then(scores1 => {
-                        
-            
-            
-                        if(!Object.keys(scores).length) {
-                            message.channel.send("No scores found for members in this server")
-                            return;
-                        }
-
-                        if(!Object.keys(scores1).length) {
-                            return;
-                        }
 
                         api.beatmaps
                         .getByBeatmapId(idData[0])
@@ -179,28 +164,91 @@ module.exports = {
                             fs.writeFileSync('data.json', newString);
                             const beatmapDATA = JSON.parse(newString);
 
+
+                            if(!Object.keys(scores).length) {
+                                var sc0 = 1
+                                score_0()
+                                return
+                            }
+
+                            if(!Object.keys(scores1).length) {
+                                var sc1 = 1
+                                score_1()
+                                return
+                            }
+
+                        
+            
+            
+                       if(sc0 && sc1) {
+        
+                        
+                            message.channel.send("No scores found for members in this server")
+                            
+                            return;
+                        }
+
+                            function score_0(){
+                                var footerImage = Math.random() < 0.5 ? "https://i.imgur.com/mDXh9Sd.png" : "https://a.ppy.sh/14459921?1577801006.jpeg";
+
+                                const scoreEmbed0 = new Discord.MessageEmbed()
+                                .setColor('RED')
+                                .setTitle('Scores for this server' + ' on ' + `${beatmapDATA.title}` + ` ${beatmapDATA.version}`)
+                                .setURL('https://osu.ppy.sh/b/' + `${beatmapDATA.id}`)
+                                .setThumbnail('https://b.ppy.sh/thumb/' +  `${beatmapDATA.setId}` + 'l.jpg')
+                                .setDescription(`1. \`${scores1[0].user.name}\` **Rank: **` + `${scores1[0].rank}` + ' ➠ ' + '**PP: **' + `${scores1[0].pp}` + ' ➠ ' + '**Acc: **' + `${scores1[0].accuracy}` + '% ➠ ' + '**Score: **' + `${scores1[0].score.total}` +
+        
+                                ' \n**Hits: **' + `${scores1[0].hits[300]}` + ' / ' + `${scores1[0].hits[100]}` + ' / ' +  `${scores1[0].hits[50]}` + ' / ' + `${scores1[0].hits[0]}` + ' ➠ ' + ' **Max Combo:** '  + `${scores1[0].combo.max}` + 
+                                ' \n**Score set:** ' + timeago.format(scores1[0].date))
+                                .setTimestamp()
+                                .setFooter('Made by Xhera & Whiffy', footerImage)
+        
+                                message.channel.send(scoreEmbed0)
+                            }
+
+                            function score_1(){
+                                var footerImage = Math.random() < 0.5 ? "https://i.imgur.com/mDXh9Sd.png" : "https://a.ppy.sh/14459921?1577801006.jpeg";
+
+                                const scoreEmbed1 = new Discord.MessageEmbed()
+                                .setColor('RED')
+                                .setTitle('Scores for this server' + ' on ' + `${beatmapDATA.title}` + ` ${beatmapDATA.version}`)
+                                .setURL('https://osu.ppy.sh/b/' + `${beatmapDATA.id}`)
+                                .setThumbnail('https://b.ppy.sh/thumb/' +  `${beatmapDATA.setId}` + 'l.jpg')
+                                .setDescription(`1. \`${scores[0].user.name}\` **Rank: **` + `${scores[0].rank}` + ' ➠ ' + '**PP: **' + `${scores[0].pp}` + ' ➠ ' + '**Acc: **' + `${scores[0].accuracy}` + '% ➠ ' + '**Score: **' + `${scores[0].score.total}` +
+        
+                                ' \n**Hits: **' + `${scores[0].hits[300]}` + ' / ' + `${scores[0].hits[100]}` + ' / ' +  `${scores[0].hits[50]}` + ' / ' + `${scores[0].hits[0]}` + ' ➠ ' + ' **Max Combo:** '  + `${scores[0].combo.max}` + 
+                                ' \n**Score set:** ' + timeago.format(scores[0].date))
+                                .setTimestamp()
+                                .setFooter('Made by Xhera & Whiffy', footerImage)
+        
+                                message.channel.send(scoreEmbed1)
+                            }
+
+
+
+
                             var footerImage = Math.random() < 0.5 ? "https://i.imgur.com/mDXh9Sd.png" : "https://a.ppy.sh/14459921?1577801006.jpeg";
 
-                            const scoreEmbed2 = new Discord.MessageEmbed()
+                            const scoreEmbed0 = new Discord.MessageEmbed()
                             .setColor('RED')
                             .setTitle('Scores for this server' + ' on ' + `${beatmapDATA.title}` + ` ${beatmapDATA.version}`)
                             .setURL('https://osu.ppy.sh/b/' + `${beatmapDATA.id}`)
                             .setThumbnail('https://b.ppy.sh/thumb/' +  `${beatmapDATA.setId}` + 'l.jpg')
-                            .setDescription(`1. \`${scores[0].user.name}\` **Rank: **` + `${scores[0].rank}` + ' ➠ ' + '**PP: **' + `${scores[0].pp}` + ' ➠ ' + '**Acc: **' + `${scores[0].accuracy}` + '% ➠ ' + '**Score: **' + `${scores[0].score.total}` +
-        
-                            ' \n**Hits: **' + `${scores[0].hits[300]}` + ' / ' + `${scores[0].hits[100]}` + ' / ' +  `${scores[0].hits[50]}` + ' / ' + `${scores[0].hits[0]}` + ' ➠ ' + ' **Max Combo:** '  + `${scores[0].combo.max}` + 
-                            ' \n**Score set:** ' + timeago.format(scores[0].date) +
-                            ' \n' + 
-                            ` \n2. \`${scores1[0].mods.name}\` **Rank: **` + `${scores1[0].rank}` + ' ➠ ' + '**PP: **' + `${scores1[0].pp}` + ' ➠ ' + '**Acc: **' + `${scores1[0].accuracy}` + '% ➠ ' + '**Score: **' + `${scores1[0].score.total}` +
-                            ' \n' +
-        
+                            .setDescription(`1. \`${scores1[0].user.name}\` **Rank: **` + `${scores1[0].rank}` + ' ➠ ' + '**PP: **' + `${scores1[0].pp}` + ' ➠ ' + '**Acc: **' + `${scores1[0].accuracy}` + '% ➠ ' + '**Score: **' + `${scores1[0].score.total}` +
+    
                             ' \n**Hits: **' + `${scores1[0].hits[300]}` + ' / ' + `${scores1[0].hits[100]}` + ' / ' +  `${scores1[0].hits[50]}` + ' / ' + `${scores1[0].hits[0]}` + ' ➠ ' + ' **Max Combo:** '  + `${scores1[0].combo.max}` + 
-                            ' \n**Score set:** ' + timeago.format(scores1[0].date))
+                            ' \n**Score set:** ' + timeago.format(scores1[0].date) +
+
+                            `\n2. \`${scores[0].user.name}\` **Rank: **` + `${scores[0].rank}` + ' ➠ ' + '**PP: **' + `${scores[0].pp}` + ' ➠ ' + '**Acc: **' + `${scores[0].accuracy}` + '% ➠ ' + '**Score: **' + `${scores[0].score.total}` +
+        
+                                ' \n**Hits: **' + `${scores[0].hits[300]}` + ' / ' + `${scores[0].hits[100]}` + ' / ' +  `${scores[0].hits[50]}` + ' / ' + `${scores[0].hits[0]}` + ' ➠ ' + ' **Max Combo:** '  + `${scores[0].combo.max}` + 
+                                ' \n**Score set:** ' + timeago.format(scores[0].date))
                             .setTimestamp()
                             .setFooter('Made by Xhera & Whiffy', footerImage)
-        
-                            message.channel.send(scoreEmbed2);
-                    return;
+    
+                            message.channel.send(scoreEmbed0)
+
+
                         })
 
                 })
@@ -217,22 +265,13 @@ module.exports = {
 
                     v1.scores({ b: idData[0], u: data[2].text, limit: 1 })
                     .then(scores2 => {
+
+                        api.beatmaps
+                        .getByBeatmapId(idData[0])
+                        .then(beatmapData =>{
                     
         
         
-                    if(!Object.keys(scores).length) {
-                        message.channel.send("No scores found for members in this server")
-                        return;
-                    }
-
-                    if(!Object.keys(scores1).length) {
-                        return;
-                    }
-
-                    api.beatmaps
-                    .getByBeatmapId(idData[0])
-                    .then(beatmapData =>{
-                    
                         const dataJSON = JSON.stringify(beatmapData);
                         fs.writeFileSync('data.json', dataJSON);
                         const dataBuffer = fs.readFileSync('data.json');
@@ -241,37 +280,115 @@ module.exports = {
                         fs.writeFileSync('data.json', newString);
                         const beatmapDATA = JSON.parse(newString);
 
+                        function score_0(){
+                            var footerImage = Math.random() < 0.5 ? "https://i.imgur.com/mDXh9Sd.png" : "https://a.ppy.sh/14459921?1577801006.jpeg";
+
+                            const scoreEmbed0 = new Discord.MessageEmbed()
+                            .setColor('RED')
+                            .setTitle('Scores for this server' + ' on ' + `${beatmapDATA.title}` + ` ${beatmapDATA.version}`)
+                            .setURL('https://osu.ppy.sh/b/' + `${beatmapDATA.id}`)
+                            .setThumbnail('https://b.ppy.sh/thumb/' +  `${beatmapDATA.setId}` + 'l.jpg')
+                            .setDescription(`1. \`${scores1[0].user.name}\` **Rank: **` + `${scores1[0].rank}` + ' ➠ ' + '**PP: **' + `${scores1[0].pp}` + ' ➠ ' + '**Acc: **' + `${scores1[0].accuracy}` + '% ➠ ' + '**Score: **' + `${scores1[0].score.total}` +
+    
+                            ' \n**Hits: **' + `${scores1[0].hits[300]}` + ' / ' + `${scores1[0].hits[100]}` + ' / ' +  `${scores1[0].hits[50]}` + ' / ' + `${scores1[0].hits[0]}` + ' ➠ ' + ' **Max Combo:** '  + `${scores1[0].combo.max}` + 
+                            ' \n**Score set:** ' + timeago.format(scores1[0].date))
+                            .setTimestamp()
+                            .setFooter('Made by Xhera & Whiffy', footerImage)
+    
+                            message.channel.send(scoreEmbed0)
+                        }
+
+                        function score_1(){
+                            var footerImage = Math.random() < 0.5 ? "https://i.imgur.com/mDXh9Sd.png" : "https://a.ppy.sh/14459921?1577801006.jpeg";
+
+                            const scoreEmbed1 = new Discord.MessageEmbed()
+                            .setColor('RED')
+                            .setTitle('Scores for this server' + ' on ' + `${beatmapDATA.title}` + ` ${beatmapDATA.version}`)
+                            .setURL('https://osu.ppy.sh/b/' + `${beatmapDATA.id}`)
+                            .setThumbnail('https://b.ppy.sh/thumb/' +  `${beatmapDATA.setId}` + 'l.jpg')
+                            .setDescription(`1. \`${scores[0].user.name}\` **Rank: **` + `${scores[0].rank}` + ' ➠ ' + '**PP: **' + `${scores[0].pp}` + ' ➠ ' + '**Acc: **' + `${scores[0].accuracy}` + '% ➠ ' + '**Score: **' + `${scores[0].score.total}` +
+    
+                            ' \n**Hits: **' + `${scores[0].hits[300]}` + ' / ' + `${scores[0].hits[100]}` + ' / ' +  `${scores[0].hits[50]}` + ' / ' + `${scores[0].hits[0]}` + ' ➠ ' + ' **Max Combo:** '  + `${scores[0].combo.max}` + 
+                            ' \n**Score set:** ' + timeago.format(scores[0].date))
+                            .setTimestamp()
+                            .setFooter('Made by Xhera & Whiffy', footerImage)
+    
+                            message.channel.send(scoreEmbed1)
+                        }
+
+                        function score_2(){
+                            var footerImage = Math.random() < 0.5 ? "https://i.imgur.com/mDXh9Sd.png" : "https://a.ppy.sh/14459921?1577801006.jpeg";
+
+                            const scoreEmbed1 = new Discord.MessageEmbed()
+                            .setColor('RED')
+                            .setTitle('Scores for this server' + ' on ' + `${beatmapDATA.title}` + ` ${beatmapDATA.version}`)
+                            .setURL('https://osu.ppy.sh/b/' + `${beatmapDATA.id}`)
+                            .setThumbnail('https://b.ppy.sh/thumb/' +  `${beatmapDATA.setId}` + 'l.jpg')
+                            .setDescription(`1. \`${scores2[0].user.name}\` **Rank: **` + `${scores2[0].rank}` + ' ➠ ' + '**PP: **' + `${scores2[0].pp}` + ' ➠ ' + '**Acc: **' + `${scores2[0].accuracy}` + '% ➠ ' + '**Score: **' + `${scores2[0].score.total}` +
+    
+                            ' \n**Hits: **' + `${scores2[0].hits[300]}` + ' / ' + `${scores2[0].hits[100]}` + ' / ' +  `${scores2[0].hits[50]}` + ' / ' + `${scores2[0].hits[0]}` + ' ➠ ' + ' **Max Combo:** '  + `${scores2[0].combo.max}` + 
+                            ' \n**Score set:** ' + timeago.format(scores2[0].date))
+                            .setTimestamp()
+                            .setFooter('Made by Xhera & Whiffy', footerImage)
+    
+                            message.channel.send(scoreEmbed1)
+                        }
+
+                        if(!Object.keys(scores).length) {
+                            score_0()
+                            return
+                        }
+
+                        if(!Object.keys(scores1).length) {
+                            score_1()
+                            return
+                        }
+
+                        if(!Object.keys(scores2).length) {
+                            score_2()
+                            return
+                        }
+                    
+        
+        
+                    if(!Object.keys(scores).length && !Object.keys(scores1).length && !Object.keys(scores2).length) {
+    
+                    
+                        message.channel.send("No scores found for members in this server")
+                        
+                        return;
+                    }
+
+                    else{
+
                         var footerImage = Math.random() < 0.5 ? "https://i.imgur.com/mDXh9Sd.png" : "https://a.ppy.sh/14459921?1577801006.jpeg";
-            
-                            const scoreEmbed3 = new Discord.MessageEmbed()
-                                .setColor('RED')
-                                .setTitle('Scores for ' + `${scores[0].user.name}` + ' on ' + `${beatmapDATA.title}` + ` ${beatmapDATA.version}`)
-                                .setURL('https://osu.ppy.sh/b/' + `${beatmapDATA.id}`)
-                                .setThumbnail('https://b.ppy.sh/thumb/' +  `${beatmapDATA.setId}` + 'l.jpg')
-                                .setDescription(`1. \`${scores[0].mods.name}\` **Rank: **` + `${scores[0].rank}` + ' ➠ ' + '**PP: **' + `${scores[0].pp}` + ' ➠ ' + '**Acc: **' + `${scores[0].accuracy}` + '% ➠ ' + '**Score: **' + `${scores[0].score.total}` +
-            
-                                ' \n**Hits: **' + `${scores[0].hits[300]}` + ' / ' + `${scores[0].hits[100]}` + ' / ' +  `${scores[0].hits[50]}` + ' / ' + `${scores[0].hits[0]}` + ' ➠ ' + ' **Max Combo:** '  + `${scores[0].combo.max}` + 
-                                ' \n**Score set:** ' + timeago.format(scores[0].date) +
-                                ' \n' + 
-            
-                                ` \n2. \`${scores1[0].mods.name}\` **Rank: **` + `${scores1[0].rank}` + ' ➠ ' + '**PP: **' + `${scores1[0].pp}` + ' ➠ ' + '**Acc: **' + `${scores1[0].accuracy}` + '% ➠ ' + '**Score: **' + `${scores1[0].score.total}` +
-                                ' \n' +
-            
-                                ' \n**Hits: **' + `${scores1[0].hits[300]}` + ' / ' + `${scores1[0].hits[100]}` + ' / ' +  `${scores1[0].hits[50]}` + ' / ' + `${scores1[0].hits[0]}` + ' ➠ ' + ' **Max Combo:** '  + `${scores1[0].combo.max}` + 
-                                ' \n**Score set:** ' + timeago.format(scores1[0].date) +
-            
-                                ' \n' +
-            
-                                ` \n3. \`${scores2[0].mods.name}\` **Rank: **` + `${scores2[0].rank}` + ' ➠ ' + '**PP: **' + `${scores2[0].pp}` + ' ➠ ' + '**Acc: **' + `${scores2[0].accuracy}` + '% ➠ ' + '**Score: **' + `${scores2[0].score.total}` +
-                                ' \n' +
-            
-                                ' \n**Hits: **' + `${scores2[0].hits[300]}` + ' / ' + `${scores2[0].hits[100]}` + ' / ' +  `${scores2[0].hits[50]}` + ' / ' + `${scores2[0].hits[0]}` + ' ➠ ' + ' **Max Combo:** '  + `${scores2[0].combo.max}` + 
-                                ' \n**Score set:** ' + timeago.format(scores2[0].date))
-                                .setTimestamp()
-                                .setFooter('Made by Xhera & Whiffy', footerImage)
-            
-                                message.channel.send(scoreEmbed3);
-                return;
+
+                        const scoreEmbed0 = new Discord.MessageEmbed()
+                        .setColor('RED')
+                        .setTitle('Scores for this server' + ' on ' + `${beatmapDATA.title}` + ` ${beatmapDATA.version}`)
+                        .setURL('https://osu.ppy.sh/b/' + `${beatmapDATA.id}`)
+                        .setThumbnail('https://b.ppy.sh/thumb/' +  `${beatmapDATA.setId}` + 'l.jpg')
+                        .setDescription(`1. \`${scores1[0].user.name}\` **Rank: **` + `${scores1[0].rank}` + ' ➠ ' + '**PP: **' + `${scores1[0].pp}` + ' ➠ ' + '**Acc: **' + `${scores1[0].accuracy}` + '% ➠ ' + '**Score: **' + `${scores1[0].score.total}` +
+
+                        ' \n**Hits: **' + `${scores1[0].hits[300]}` + ' / ' + `${scores1[0].hits[100]}` + ' / ' +  `${scores1[0].hits[50]}` + ' / ' + `${scores1[0].hits[0]}` + ' ➠ ' + ' **Max Combo:** '  + `${scores1[0].combo.max}` + 
+                        ' \n**Score set:** ' + timeago.format(scores1[0].date) +
+
+                        `\n2. \`${scores[0].user.name}\` **Rank: **` + `${scores[0].rank}` + ' ➠ ' + '**PP: **' + `${scores[0].pp}` + ' ➠ ' + '**Acc: **' + `${scores[0].accuracy}` + '% ➠ ' + '**Score: **' + `${scores[0].score.total}` +
+    
+                            ' \n**Hits: **' + `${scores[0].hits[300]}` + ' / ' + `${scores[0].hits[100]}` + ' / ' +  `${scores[0].hits[50]}` + ' / ' + `${scores[0].hits[0]}` + ' ➠ ' + ' **Max Combo:** '  + `${scores[0].combo.max}` + 
+                            ' \n**Score set:** ' + timeago.format(scores[0].date) +
+                            
+                        `\n3. \`${scores2[0].user.name}\` **Rank: **` + `${scores2[0].rank}` + ' ➠ ' + '**PP: **' + `${scores2[0].pp}` + ' ➠ ' + '**Acc: **' + `${scores2[0].accuracy}` + '% ➠ ' + '**Score: **' + `${scores2[0].score.total}` +
+    
+                            ' \n**Hits: **' + `${scores2[0].hits[300]}` + ' / ' + `${scores2[0].hits[100]}` + ' / ' +  `${scores2[0].hits[50]}` + ' / ' + `${scores2[0].hits[0]}` + ' ➠ ' + ' **Max Combo:** '  + `${scores2[0].combo.max}` + 
+                            ' \n**Score set:** ' + timeago.format(scores2[0].date))
+                        .setTimestamp()
+                        .setFooter('Made by Xhera & Whiffy', footerImage)
+
+                        message.channel.send(scoreEmbed0)
+
+
+                    }
                     })
                     })
 

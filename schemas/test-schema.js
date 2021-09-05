@@ -7,10 +7,9 @@ const reqString = {
 
 const userSchema = mongoose.Schema({
 
-    _id: Number,
-    channelId: Number,
-    memId: reqString,
+    _id: reqString,
+    channelId: reqString,
     text: reqString
 })
 
-module.exports = mongoose.model('Users', userSchema)
+module.exports = mongoose.model('Test', userSchema)
