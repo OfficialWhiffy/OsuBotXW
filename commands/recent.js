@@ -48,12 +48,7 @@ module.exports = {
             console.log('FETCHING FROM DATABASE')
             await mongo().then(async mongoose => {
                  try {
-<<<<<<< HEAD
-                    const result = await userSchema.findOne({ 
-						memId: member.id})
-=======
                     const result = await userSchema.findOne({ _id: member.id })
->>>>>>> parent of d85b2c9 (big update (please read description for patch notes))
 
 					if(!result){
 						message.channel.send("No user found set user using '.setuser <username or userid>' ")
@@ -75,8 +70,7 @@ module.exports = {
 api.user
 	.getRecent(data, 0, 1)
 	.then(recentData => {
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 
 		if(!Object.keys(recentData).length) {
 			message.channel.send("No recent play found in the last 24h")
@@ -108,8 +102,7 @@ api.user
 		}
 
 		const recentDATA = recentCheck();
-=======
->>>>>>> parent of e819647 (recent update)
+
 
 		if(!Object.keys(recentData).length) {
 			message.channel.send("No recent play found in the last 24h")
@@ -145,7 +138,7 @@ api.user
 
 		var enabledmod = `${recentDATA.enabledMods}`;
 
-=======
+
 
 		if(!Object.keys(recentData).length) {
 			message.channel.send("No recent play found in the last 24h")
@@ -179,7 +172,7 @@ api.user
 		const recentDATA = recentCheck();
 
 
->>>>>>> parent of e819647 (recent update)
+
 		var enabledmod = `${recentDATA.enabledMods}`;
 
 		api.user
@@ -474,7 +467,6 @@ else{
 		const stringJSON = dataBuffer.toString();
 		newString = stringJSON.replace(/^(.)|(.)$/g,'');
         fs.writeFileSync('recent.json', newString);
-<<<<<<< HEAD
 
 
 
@@ -493,26 +485,6 @@ else{
 		const recentDATA = recentCheck();
 
 
-=======
-
-
-
-		function recentCheck(){
-			try{
-				const dataRECENT = fs.readFileSync('recent.json');
-				
-				return JSON.parse(dataRECENT);
-				
-			} catch(err) {
-				message.channel.send("No recent play found in the last 24h")
-				
-			}
-		}
-
-		const recentDATA = recentCheck();
-
-
->>>>>>> parent of e819647 (recent update)
 		var enabledmod = `${recentDATA.enabledMods}`;
 
 		api.user

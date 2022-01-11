@@ -53,11 +53,7 @@ module.exports = {
             console.log('FETCHING FROM DATABASE')
             await mongo().then(async mongoose => {
                  try {
-<<<<<<< HEAD
-                    const result = await userSchema.findOne({ memId: member.id })
-=======
                     const result = await userSchema.findOne({ _id: member.id })
->>>>>>> parent of d85b2c9 (big update (please read description for patch notes))
 
                     if(!result){
 						message.channel.send("No user found set user using '.setuser <username or userid>' ")
