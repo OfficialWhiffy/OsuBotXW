@@ -72,36 +72,7 @@ api.user
 	.then(recentData => {
 
 
-		if(!Object.keys(recentData).length) {
-			message.channel.send("No recent play found in the last 24h")
-			return;
-		}
-
-
-
-
-		const dataJSON = JSON.stringify(recentData);
-		fs.writeFileSync('recent.json', dataJSON);
-		const dataBuffer = fs.readFileSync('recent.json');
-		const stringJSON = dataBuffer.toString();
-		newString = stringJSON.replace(/^(.)|(.)$/g,'');
-        fs.writeFileSync('recent.json', newString);
-
-
-
-		function recentCheck(){
-			try{
-				const dataRECENT = fs.readFileSync('recent.json');
-				
-				return JSON.parse(dataRECENT);
-				
-			} catch(err) {
-				message.channel.send("No recent play found in the last 24h")
-				
-			}
-		}
-
-		const recentDATA = recentCheck();
+	
 
 
 		if(!Object.keys(recentData).length) {
