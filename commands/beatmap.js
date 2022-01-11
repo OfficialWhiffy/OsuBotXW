@@ -1,8 +1,6 @@
 const Nodesu = require('nodesu');
 const Discord = require('discord.js');
 const fs = require('fs');
-const mongo = require('../mongo')
-const scoresSchema = require("../schemas/score-schema")
 
 //const { apiKey } = require('../config')
 const dotenv = require('dotenv');
@@ -21,39 +19,11 @@ module.exports = {
 	description: 'look up a beatmap',
 	async execute(message, args) {
 
-        const { member, channel, content, guild } = message
-        const cache = {}
-
-        let text = content
-
-        let data = cache[member.id]
-
-        let idData = {}
-
-        await mongo().then(async (mongoose) =>{
-            try{
-
-                console.log('Grabbing BeatmapId')
-                
-                const result = await scoresSchema.findOne({channelId: channel.id})
-
-                
-                
-
-                idData = [result.beatmapIDScore]
-
-
-
-            } finally{
-                
-                mongoose.connection.close()
-            }
-                
-        })
+        const IDraw = fs.readFileSync('ID.json')
         
 
         api.beatmaps
-        .getByBeatmapId(idData[0])
+        .getByBeatmapId(`${IDraw}`)
         .then(data => {
 
 

@@ -48,23 +48,139 @@ module.exports = {
             console.log('FETCHING FROM DATABASE')
             await mongo().then(async mongoose => {
                  try {
-                    const result = await userSchema.findOne({ _id: channel.id })
+<<<<<<< HEAD
+                    const result = await userSchema.findOne({ 
+						memId: member.id})
+=======
+                    const result = await userSchema.findOne({ _id: member.id })
+>>>>>>> parent of d85b2c9 (big update (please read description for patch notes))
 
 					if(!result){
 						message.channel.send("No user found set user using '.setuser <username or userid>' ")
 						return;
 					}
+					console.log(result)
 
                     cache[member.id] = data = [result.text]
 					
                 } finally {
-					mongoose.connection.close()
+					mongoose.connection.close() 
                 }
+
+				console.log(data)
             
 
 
 				
+api.user
+	.getRecent(data, 0, 1)
+	.then(recentData => {
+<<<<<<< HEAD
+<<<<<<< HEAD
 
+		if(!Object.keys(recentData).length) {
+			message.channel.send("No recent play found in the last 24h")
+			return;
+		}
+
+
+
+
+		const dataJSON = JSON.stringify(recentData);
+		fs.writeFileSync('recent.json', dataJSON);
+		const dataBuffer = fs.readFileSync('recent.json');
+		const stringJSON = dataBuffer.toString();
+		newString = stringJSON.replace(/^(.)|(.)$/g,'');
+        fs.writeFileSync('recent.json', newString);
+
+
+
+		function recentCheck(){
+			try{
+				const dataRECENT = fs.readFileSync('recent.json');
+				
+				return JSON.parse(dataRECENT);
+				
+			} catch(err) {
+				message.channel.send("No recent play found in the last 24h")
+				
+			}
+		}
+
+		const recentDATA = recentCheck();
+=======
+>>>>>>> parent of e819647 (recent update)
+
+		if(!Object.keys(recentData).length) {
+			message.channel.send("No recent play found in the last 24h")
+			return;
+		}
+
+
+
+
+		const dataJSON = JSON.stringify(recentData);
+		fs.writeFileSync('recent.json', dataJSON);
+		const dataBuffer = fs.readFileSync('recent.json');
+		const stringJSON = dataBuffer.toString();
+		newString = stringJSON.replace(/^(.)|(.)$/g,'');
+        fs.writeFileSync('recent.json', newString);
+
+
+
+		function recentCheck(){
+			try{
+				const dataRECENT = fs.readFileSync('recent.json');
+				
+				return JSON.parse(dataRECENT);
+				
+			} catch(err) {
+				message.channel.send("No recent play found in the last 24h")
+				
+			}
+		}
+
+		const recentDATA = recentCheck();
+
+
+		var enabledmod = `${recentDATA.enabledMods}`;
+
+=======
+
+		if(!Object.keys(recentData).length) {
+			message.channel.send("No recent play found in the last 24h")
+			return;
+		}
+
+
+
+
+		const dataJSON = JSON.stringify(recentData);
+		fs.writeFileSync('recent.json', dataJSON);
+		const dataBuffer = fs.readFileSync('recent.json');
+		const stringJSON = dataBuffer.toString();
+		newString = stringJSON.replace(/^(.)|(.)$/g,'');
+        fs.writeFileSync('recent.json', newString);
+
+
+
+		function recentCheck(){
+			try{
+				const dataRECENT = fs.readFileSync('recent.json');
+				
+				return JSON.parse(dataRECENT);
+				
+			} catch(err) {
+				message.channel.send("No recent play found in the last 24h")
+				
+			}
+		}
+
+		const recentDATA = recentCheck();
+
+
+>>>>>>> parent of e819647 (recent update)
+		var enabledmod = `${recentDATA.enabledMods}`;
 
 		api.user
             .get(data)
@@ -79,42 +195,6 @@ module.exports = {
         
                 console.log(message.author.username + " called recent play for user " + userDATA.username);
 				console.log(userData)
-
-
-				api.user
-				.getRecent(data, 0, 1)
-				.then(recentData => {
-
-					if(!Object.keys(recentData).length) {
-						message.channel.send("No recent play found in the last 24h for " + userDATA.username)
-						return;
-					}
-
-
-
-
-					const dataJSON = JSON.stringify(recentData);
-					fs.writeFileSync('recent.json', dataJSON);
-					const dataBuffer = fs.readFileSync('recent.json');
-					const stringJSON = dataBuffer.toString();
-					newString = stringJSON.replace(/^(.)|(.)$/g,'');
-					fs.writeFileSync('recent.json', newString);
-
-
-
-					function recentCheck(){
-						try{
-							const dataRECENT = fs.readFileSync('recent.json');
-							
-							return JSON.parse(dataRECENT);
-							
-						} catch(err) {
-							message.channel.send("No recent play found in the last 24h for " + userDATA.username)
-							
-						}
-					}
-
-					const recentDATA = recentCheck();
 
 		api.beatmaps
 		.getByBeatmapId(`${recentDATA.beatmapId}`)
@@ -156,9 +236,9 @@ module.exports = {
 			var sidecolor = ('');
 			var Rank =('');
 			var miss = "<:miss:868232869607247912>"
-			var hit50 = "<:100_:878032224505700372>"
-			var hit100 = "<:300_:878032224363094017>"
-			var hit300 = "<:50_2:878229026978807818>"
+			var hit50 = "<:50_:878033880844746782>"
+			var hit100 = "<:100_:878032224505700372>"
+			var hit300 = "<:300_:878032224363094017>"
 
 			switch (statusRaw) {
 
@@ -305,20 +385,21 @@ module.exports = {
 			if(rawRank === 'F'){
 
 				const recentEmbedJSON = new Discord.MessageEmbed()
-					.setAuthor(`Recent play for ${userDATA.username}`, `http://a.ppy.sh/${userDATA.id}`, `https://osu.ppy.sh/u/${userDATA.id}`)
+					.setAuthor(`Recent play for: ${userDATA.username}`, `http://a.ppy.sh/${userDATA.id}`, `https://osu.ppy.sh/u/${userDATA.id}`)
 					.setColor(sidecolor)
 					.setTitle('')
 					
 					.setDescription(status + '** ' + `${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ' + ' + modData + ' ['+ star[0] + '*' + ']** '+
 									'\n' + '\n' +'**Rank: **' + Rank  +
 									'\n**PP:** ' + ppDATA + fcdata + accuracy + '%' +'  **Score:** ' + `${recentDATA.score}` +
-									'\n' + '**Hits:**'  + hit300 + `${recentDATA.count300}` + ' |' + hit100 + `${recentDATA.count100}` + ' |' + hit50 + `${recentDATA.count50}`  + ' |' + miss + `${recentDATA.countMiss}` +
+									'\n' + '**Hits:**' + miss + `${recentDATA.countMiss}` + ' |' + hit300 + `${recentDATA.count300}` + ' |' + hit100 + `${recentDATA.count100}` + ' |' + hit50 + `${recentDATA.count50}`  +
 									'\n' + '**Map completion:** ' + mapCompletion.toFixed(2) + '%' + 
 									'\n**Combo:** ' + `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}x`  
 									+ '\n[**Map link**](https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`+ ')', 'https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
 
 
 					.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
+					.setThumbnail('http://a.ppy.sh/' + `${userDATA.id}`)
 					.setImage('https://assets.ppy.sh/beatmaps/' +  `${beatmapDATA.setId}` + '/covers/cover.jpg')
 					
 					
@@ -337,16 +418,17 @@ module.exports = {
 
 			const recentEmbedJSON = new Discord.MessageEmbed()
 					.setColor(sidecolor)
-					.setAuthor(`Recent play for ${userDATA.username}`, `http://a.ppy.sh/${userDATA.id}`, `https://osu.ppy.sh/u/${userDATA.id}`)
+					.setAuthor(`Recent play for: ${userDATA.username}`, `http://a.ppy.sh/${userDATA.id}`, `https://osu.ppy.sh/u/${userDATA.id}`)
 					.setTitle('')
 					.setDescription(status + '** ' + `${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ' + ' + modData + ' ['+ star[0] + '*' + ']** ' + 
 									'\n'+ '\n' + '**Rank: **' + Rank  +
 									'\n**PP:** ' + ppDATA + fcdata + accuracy + '%' +'  **Score:** ' + `${recentDATA.score}` +
-									'\n' + '**Hits:**'  + hit300 + `${recentDATA.count300}` + ' |' + hit100 + `${recentDATA.count100}` + ' |' + hit50 + `${recentDATA.count50}`  + ' |' + miss + `${recentDATA.countMiss}` +
+									'\n' + '**Hits:**' + miss + `: ${recentDATA.countMiss}` + ' | ' + hit300 + `: ${recentDATA.count300}` + ' | ' + hit100 + `: ${recentDATA.count100}` + ' | ' + hit50 + `: ${recentDATA.count50}`  +
 									'\n**Combo:** ' + `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}x`
 									+ '\n[**Map link**](https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`+ ')')
 
 					.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
+					.setThumbnail('http://a.ppy.sh/' + `${userDATA.id}`)
 					.setImage('https://assets.ppy.sh/beatmaps/' +  `${beatmapDATA.setId}` + '/covers/cover.jpg')
 					
 					.setTimestamp()
@@ -375,7 +457,63 @@ else{
 
 	var Udata = args[0]
 
+	api.user
+	.getRecent(Udata, 0, 1)
+	.then(recentData => {
 
+		if(!Object.keys(recentData).length) {
+			message.channel.send("No recent play found in the last 24h")
+			return;
+		}
+		
+
+
+		const dataJSON = JSON.stringify(recentData);
+		fs.writeFileSync('recent.json', dataJSON);
+		const dataBuffer = fs.readFileSync('recent.json');
+		const stringJSON = dataBuffer.toString();
+		newString = stringJSON.replace(/^(.)|(.)$/g,'');
+        fs.writeFileSync('recent.json', newString);
+<<<<<<< HEAD
+
+
+
+		function recentCheck(){
+			try{
+				const dataRECENT = fs.readFileSync('recent.json');
+				
+				return JSON.parse(dataRECENT);
+				
+			} catch(err) {
+				message.channel.send("No recent play found in the last 24h")
+				
+			}
+		}
+
+		const recentDATA = recentCheck();
+
+
+=======
+
+
+
+		function recentCheck(){
+			try{
+				const dataRECENT = fs.readFileSync('recent.json');
+				
+				return JSON.parse(dataRECENT);
+				
+			} catch(err) {
+				message.channel.send("No recent play found in the last 24h")
+				
+			}
+		}
+
+		const recentDATA = recentCheck();
+
+
+>>>>>>> parent of e819647 (recent update)
+		var enabledmod = `${recentDATA.enabledMods}`;
 
 		api.user
             .get(Udata)
@@ -389,42 +527,6 @@ else{
                 const userDATA = JSON.parse(stringJSON);
         
                 console.log(message.author.username + " called recent play for user " + userDATA.username);
-
-				api.user
-				.getRecent(Udata, 0, 1)
-				.then(recentData => {
-			
-					if(!Object.keys(recentData).length) {
-						message.channel.send("No recent play found in the last 24h for " + userDATA.username)
-						return;
-					}
-					
-			
-			
-					const dataJSON = JSON.stringify(recentData);
-					fs.writeFileSync('recent.json', dataJSON);
-					const dataBuffer = fs.readFileSync('recent.json');
-					const stringJSON = dataBuffer.toString();
-					newString = stringJSON.replace(/^(.)|(.)$/g,'');
-					fs.writeFileSync('recent.json', newString);
-			
-			
-			
-					function recentCheck(){
-						try{
-							const dataRECENT = fs.readFileSync('recent.json');
-							
-							return JSON.parse(dataRECENT);
-							
-						} catch(err) {
-							message.channel.send("No recent play found in the last 24h for " + userDATA.username)
-							
-						}
-					}
-			
-					const recentDATA = recentCheck();
-
-				
 
 		api.beatmaps
 		.getByBeatmapId(`${recentDATA.beatmapId}`)
@@ -463,10 +565,11 @@ else{
 			const statusRaw  = `${beatmapDATA.approved}`
 			var footerImage = Math.random() < 0.5 ? "https://i.imgur.com/mDXh9Sd.png" : "https://a.ppy.sh/14459921?1577801006.jpeg";
 			var sidecolor = ('');
+			var Rank =('');
 			var miss = "<:miss:868232869607247912>"
-			var hit50 = "<:100_:878032224505700372>"
-			var hit100 = "<:300_:878032224363094017>"
-			var hit300 = "<:50_2:878229026978807818>"
+			var hit50 = "<:50_:878033880844746782>"
+			var hit100 = "<:100_:878032224505700372>"
+			var hit300 = "<:300_:878032224363094017>"
 
 			switch (statusRaw) {
 
@@ -529,76 +632,19 @@ else{
 
 			}
 
-			curl.get(`https://osu.ppy.sh/osu/${recentDATA.beatmapId}`, async function(err, response, body) {
-				mods = oj.modbits.from_string(data.mods.name);
-				combo = parseInt(recentDATA.maxCombo);
-				nmiss = parseInt(recentDATA.countMiss);
+			const hitobj = [];
 
-				
+			const num = data.combo;
 
-				const parser = new oj.parser().feed(body);
+			const numobj = data.req.combo - 1;
 
-				const pMap = parser.map;
-
-				const stars = new oj.diff().calc({ map: pMap, mods: mods });
-				const star = stars.toString().split(' ');
-				console.log(star[0])
-
-				const hitobj = [];
-
-
-
-				const yhit300 = count300;
-				const yhit100 = count100;
-				const yhit50 = count50;
-				const yhitmiss = countMiss;
-				const totalhits = yhit300 + yhit100 + yhit50 + yhitmiss;
-
-				const numobj = totalhits - 1;
-
-				const num = pMap.objects.length;
-
-				pMap.objects.forEach(obj => {
-					hitobj.push(obj.time);
-				});
-
-				const timing = hitobj[num - 1] - hitobj[0];
+			const timing = hitobj[num - 1] - hitobj[0];
 				const point = hitobj[numobj] - hitobj[0];
 
 				const mapCompletion = (point / timing) * 100;
-	
-					console.log(mapCompletion.toFixed(2))
 
+				console.log(mapCompletion)
 
-
-
-                const connectToMongoDB = async () =>{
-                await mongo().then(async (mongoose) =>{
-                    try{
-
-						console.log('Saving ID')
-                        const scoresID = {
-							beatmapIDScore: `${recentDATA.beatmapId}`,
-							channelId: channel.id
-						}
-
-						if(!scoresID){
-							message.channel.send("Data couldn't be saved")
-							return;
-						}
-
-						await scoresSchema.findOneAndUpdate({channelId: channel.id}, {beatmapIDScore: recentDATA.beatmapId}, {upsert: true})
-
-
-
-                    } finally{
-                        mongoose.connection.close()
-                    }
-                })
-			}
-
-	
-				connectToMongoDB()
 
 				if(data.pp.current === data.pp.fc) {
 					var fcdata = (' with ')
@@ -607,23 +653,51 @@ else{
 					fcdata = ' **»** ' + ppDATAFc + 'PP with '
 				}
 
+				const connectToMongoDB = async () =>{
+					await mongo().then(async (mongoose) =>{
+						try{
+	
+							console.log('Saving ID')
+							const scoresID = {
+								beatmapIDScore: recentDATA.beatmapId,
+								channelId: channel.id
+							}
+	
+							if(!scoresID){
+								message.channel.send("Data couldn't be saved")
+								return;
+							}
+	
+							await scoresSchema.findOneAndUpdate({channelId: channel.id}, {beatmapIDScore: recentDATA.beatmapId}, {upsert: true})
+	
+	
+	
+						} finally{
+							mongoose.connection.close()
+						}
+					})
+				}
+	
+				connectToMongoDB()
+
 
 				if(rawRank === 'F'){
 
 					const recentEmbedJSON = new Discord.MessageEmbed()
 						.setColor(sidecolor)
-						.setAuthor(`Recent play for ${userDATA.username}`, `http://a.ppy.sh/${userDATA.id}`, `https://osu.ppy.sh/u/${userDATA.id}`)
+						.setAuthor(`Recent play for: ${userDATA.username}`, `http://a.ppy.sh/${userDATA.id}`, `https://osu.ppy.sh/u/${userDATA.id}`)
 						.setTitle('')
 						.setDescription(status + '** ' + `${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ' + ' + modData + ' ['+ star[0] + '*' + ']** ' + 
 										'\n' +
 										'\n**PP:** ' + ppDATA + fcdata + accuracy + '%' +'  **Score:** ' + `${recentDATA.score}` +
-										'\n' + '**Hits:**'  + hit300 + `${recentDATA.count300}` + ' |' + hit100 + `${recentDATA.count100}` + ' |' + hit50 + `${recentDATA.count50}`  + ' |' + miss + `${recentDATA.countMiss}` +
+										'\n' + '**Hits:**' + miss + `${recentDATA.countMiss}` + ' | ' + hit300 + `${recentDATA.count300}` + ' | ' + hit100 + `${recentDATA.count100}` + ' | ' + hit50 + `${recentDATA.count50}`  +
 										'\n' + '**Map completion:** ' + mapCompletion.toFixed(2) + '%' + 
 										'\n**Combo:** ' + `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}x` +
 										'[Map link](https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`+ ')')
 	
 	
 						.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
+						.setThumbnail('http://a.ppy.sh/' + `${userDATA.id}`)
 						.setImage('https://b.ppy.sh/thumb/' +  `${beatmapDATA.setId}` + 'l.jpg')
 						
 						.setTimestamp()
@@ -641,16 +715,17 @@ else{
 	
 				const recentEmbedJSON = new Discord.MessageEmbed()
 						.setColor(sidecolor)
-						.setAuthor(`Recent play for ${userDATA.username}`, `http://a.ppy.sh/${userDATA.id}`, `https://osu.ppy.sh/u/${userDATA.id}`)
+						.setAuthor(`Recent play for: ${userDATA.username}`, `http://a.ppy.sh/${userDATA.id}`, `https://osu.ppy.sh/u/${userDATA.id}`)
 						.setTitle('')
 						.setDescription(status + '** ' + `${beatmapDATA.title}` + ' [' + `${beatmapDATA.version}` + '] ' + ' + ' + modData + ' ['+ star[0] + '*' + ']** ' + 
 										'\n'+
 										'\n**PP:** ' + ppDATA + fcdata + accuracy + '%' +'  **Score:** ' + `${recentDATA.score}` +
-										'\n' + '**Hits:**'  + hit300 + `${recentDATA.count300}` + ' |' + hit100 + `${recentDATA.count100}` + ' |' + hit50 + `${recentDATA.count50}`  + ' |' + miss + `${recentDATA.countMiss}` +
+										'\n' + '**Hits:**' + miss + `: ${recentDATA.countMiss}` + ' | ' + hit300 + `: ${recentDATA.count300}` + ' | ' + hit100 + `: ${recentDATA.count100}` + ' | ' + hit50 + `: ${recentDATA.count50}`  +
 										'\n**Combo:** ' + `${recentDATA.maxCombo}`+ '/' + `${beatmapDATA.maxCombo}x`
 										+ '\n[**Map link**](https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`+ ')')
 	
 						.setURL('https://osu.ppy.sh/b/' + `${recentDATA.beatmapId}`)
+						.setThumbnail('http://a.ppy.sh/' + `${userDATA.id}`)
 						.setImage('https://b.ppy.sh/thumb/' +  `${beatmapDATA.setId}` + 'l.jpg')
 						
 						.setTimestamp()
@@ -664,8 +739,6 @@ else{
 						
 	
 					message.channel.send(recentEmbedJSON)
-
-				})
 
 
 })

@@ -37,12 +37,21 @@ module.exports = {
             try{
                await userSchema.findOneAndUpdate(
                {
+<<<<<<< HEAD
                 memId: member.id
                }, 
                {
                 
                     channelId: channel.id,
                     memId: member.id,
+=======
+                   _id: member.id
+               }, 
+               {
+                
+                    _id: member.id,
+                    channelId: channel.id,
+>>>>>>> parent of d85b2c9 (big update (please read description for patch notes))
                     text, 
                }, 
                {
@@ -55,21 +64,34 @@ module.exports = {
             }
         })
 
-        let data = cache[member.id]
+        const onJoin = async member => {
+
+            let data = cache[member.id]
 
             if(!data) {
 
                 console.log('FETCHING FROM DATABASE')
                 await mongo().then(async (mongoose) =>{
                     try{
+<<<<<<< HEAD
                         const result = await userSchema.findOne({ channelId: channel.id})
+=======
+                        const result = await userSchema.findOne({ _id: member.id})
+>>>>>>> parent of d85b2c9 (big update (please read description for patch notes))
 
-                        cache[channel.id] = [result.memId, result.text]
+                        cache[member.id] = [result.channelId, result.text]
 
                     } finally{
                         mongoose.connection.close()
                     }
                 })
+            }
+
+            const channelId = data[0]
+            const text = data[1]
+
+            const channel = guild.channels.cache.get(channelId)
+            channel.reply(text)
 
         }
 
